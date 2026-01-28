@@ -1,0 +1,48 @@
+/* class names */
+
+*{
+    margin: 0px;
+    font-size: 40px;
+    font-family: Arial;
+}
+
+.main-box1 {
+    background: yellow;
+    width:350px;
+    height:400px;
+    display: inline-block;
+    vertical-align: top;
+    padding:20px;
+
+}
+.main-box2 {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    left: 40px;
+    top: 40px;
+    background: red;
+    width:400px;
+    height:500px;
+    padding:20px;
+    margin-top:20px
+}
+
+.circle {
+    position: absolute;
+    right:10px;
+    bottom:10px;
+    background: purple;
+    width:100px;
+    height:100px;
+    border-radius: 100%;
+    align-content: center;
+    text-align: center;
+
+}
+
+.circle > p{
+    font-size: 20px;
+    color: white;
+
+}
