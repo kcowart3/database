@@ -4,14 +4,18 @@
     font-family: monospace;
 }
 
-a:hover {
-    text-decoration: none;
-  }
-
   .container {
     display: flex;
     justify-content: center;
     align-content: center;
-    padding: 50px;
+    height: 100vh;
+    align-items: center;
+}
+
+.poem{
+    display: inline-block;
+    width: 500px;
+    height:50%;
+    margin:10px auto;
 }
 
