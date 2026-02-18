@@ -4,37 +4,50 @@
     font-family: Courier
 }
 
-.door-container:hover img {
-    animation: openDoor 0.5s 1s forwards;
+.door-container {
+    position: fixed;
+    bottom: 20px;       
+    right: 20px;        
+    margin: 0;      
+    padding: 0;
+    width: 150px;
+    height: 150px;
+    perspective: 1000px;
 }
 
-.door-container:hover .door-overlay {
-    animation: showText 0.5s 1s forwards;
-}
-
-.open-door-image {
+.door-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 150px;
     height: 150px;
     object-fit: contain;
-    color:transparent;
+}
+
+.open-door-image {
+    z-index: 1;
+}
+
+.door-image {
+    z-index: 2;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+}
+
+.door-container:hover .door-image {
+    animation: openDoor 1.5s 0.5s forwards;
+}
+
+.door-container:hover .door-overlay {
+    animation: showText 0.5s 1.5s forwards;
 }
 
 @keyframes openDoor {
     0% {
-        .door-image {
-            opacity: 1;
-        }
-        .open-door-image {
-            opacity: 0;
-        }
+        transform: rotateY(0deg);
     }
     100% {
-        .door-image {
-            opacity: 0;
-        }
-        .open-door-image {
-            opacity: 1;
-        }
+        transform: rotateY(-120deg);
     }
 }
 
@@ -61,20 +74,6 @@
     font-weight: bold;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.5s ease;
-}
-
-.door-container {
-    position: fixed;
-    bottom: 20px;       
-    right: 20px;        
-    margin: 0;      
-    padding: 0;  
-}
-
-.door-container img {
-    width: 150px;
-    height: 150px;
-    object-fit: contain;
+    z-index: 3;
 }
   
