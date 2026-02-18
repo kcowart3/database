@@ -4,6 +4,77 @@
     font-family: Courier
 }
 
-b {
-    color: rgb(255, 255, 255);
+.door-container:hover img {
+    animation: openDoor 0.5s 1s forwards;
 }
+
+.door-container:hover .door-overlay {
+    animation: showText 0.5s 1s forwards;
+}
+
+.open-door-image {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    color:transparent;
+}
+
+@keyframes openDoor {
+    0% {
+        .door-image {
+            opacity: 1;
+        }
+        .open-door-image {
+            opacity: 0;
+        }
+    }
+    100% {
+        .door-image {
+            opacity: 0;
+        }
+        .open-door-image {
+            opacity: 1;
+        }
+    }
+}
+
+@keyframes showText {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.door-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.door-container {
+    position: fixed;
+    bottom: 20px;       
+    right: 20px;        
+    margin: 0;      
+    padding: 0;  
+}
+
+.door-container img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+}
+  

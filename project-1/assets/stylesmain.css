@@ -77,19 +77,60 @@ a:hover {
     animation: screenwipe 1s forwards;
   }
 
-a.house-link {
+.house-container {
+    position: relative;
     display: inline-block;
-    padding: 0;
     margin: 0;
-    border: none;
-    background-color: transparent;
-    min-width: auto;
-    color: inherit;
 }
 
-a.house-link:hover {
-    color: inherit;
-    animation: none;
+.house-container img {
+    display: block;
+    width: 450px;
+    margin: 10px auto;
+    transition: filter 0.5s ease;
+}
+
+.house-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.house-container:hover img {
+    animation: darkenImage 0.5s 1.5s forwards;
+}
+
+.house-container:hover .house-overlay {
+    animation: showText 0.5s 1.5s forwards;
+}
+
+@keyframes darkenImage {
+    0% {
+        filter: brightness(1);
+    }
+    100% {
+        filter: brightness(0);
+    }
+}
+
+@keyframes showText {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
   @keyframes screenwipe {
