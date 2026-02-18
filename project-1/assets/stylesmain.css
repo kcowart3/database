@@ -18,15 +18,17 @@ main {
 }
 
 a {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 10px 24px;
     margin: 6px 0;
     border: 1px solid rgb(0, 0, 0);
     background-color: rgb(255, 255, 255);
     color: transparent;      /* text hidden so box looks empty */
     text-decoration: none;   /* remove underline */
-    min-width: 220px;        /* make all boxes same width, larger than text */
-    text-align: center;
+    min-width: 220px;
+    min-height: 40px;
     white-space: nowrap;     /* keep text on one line so heights match */
     box-sizing: border-box;
 }
@@ -52,6 +54,7 @@ b, .word {
     text-align: left;
     margin-right: 104px;
     margin-left: 104px;
+    margin-bottom: 25px;
 }
 
 .footer {
