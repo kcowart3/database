@@ -1,0 +1,9 @@
+* {
+    color: darkblue;
+    font-family: 'Times New Roman';
+}
+
+body {
+    background-image: url(forest.jpg);
+    background-size: cover;
+}
