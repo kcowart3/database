@@ -10,7 +10,8 @@ html, body {
 
 body {
     display: flex;
-    flex-direction: column;
+    flex-direction: column;    
+    padding-bottom: 120px;
 }
 
 main {
@@ -32,15 +33,14 @@ b, .word { /* make the word "house" blue */
 .paragraph {
     font-size: 14px;
     text-align: left;
-    margin-right: 104px;
-    margin-left: 104px;
-    margin-bottom: 25px;
+    margin: 0 20% 25px;
 }
 
 .footer {
     font-size: 12px;
     text-align: center;
     margin-top: auto;
+    margin-bottom: 10px;
 }
 
 main img {
@@ -53,7 +53,7 @@ main img {
 }
 
 a:hover { /* when the mouse is over the link, make the text white */
-    color: rgb(255, 255, 255);      /* white text on black background */
+    color: rgb(255, 255, 255);  
   }
 
 .house-container {
@@ -80,11 +80,9 @@ a:hover { /* when the mouse is over the link, make the text white */
     justify-content: center;
     opacity: 0;
     transition: opacity 0.5s ease;
-}
-
-.house-overlay-link {
+    pointer-events: none;
     color: white;
-    font-size: 14px; /* adjust the size of the link text */
+    font-size: 14px; /* adjust the size of the text */
     font-weight: bold;
     text-decoration: none;
     padding: 0;
@@ -95,10 +93,11 @@ a:hover { /* when the mouse is over the link, make the text white */
     min-height: 0;
 }
 
+
 .house-container:hover img {
     animation-name: invertImage;
-    animation-duration: 0.5s;
-    animation-delay: 1.0s;
+    animation-duration: 0.5s; /* controls the speed of the color inversion */
+    animation-delay: 0.5s; /* controls the delay before the animation starts */
     animation-fill-mode: forwards;
 }
 
