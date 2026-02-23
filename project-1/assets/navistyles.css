@@ -1,0 +1,84 @@
+* {
+    font-family: Courier, monospace;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(0, 0, 0);
+}
+
+.schematic-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.schematic-title {
+    color: white;
+    font-size: 14px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+b, .word {
+    color: rgb(0, 71, 187);
+}
+
+.schematic-wrapper {
+    position: relative;
+    max-width: 720px;
+    width: 100%;
+}
+
+.schematic-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    width: 100%;
+}
+
+.schematic-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Room name links - visible text */
+a.room-link {
+    cursor: pointer;
+    text-decoration: none;
+    outline: none;
+}
+
+a.room-link text {
+    fill: white;
+    font-family: Courier, monospace;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+a.room-link:hover text {
+    fill: rgb(0, 71, 187);
+}
+
+@media (max-width: 600px) {
+    .schematic-title {
+        font-size: 12px;
+    }
+    .schematic-wrapper {
+        max-width: 100%;
+    }
+}
