@@ -11,12 +11,6 @@ body {
     background-repeat: no-repeat;
 }
 
-p {
-    color: white;
-    font-size: 14px;
-    text-align: left;
-    margin: 50px 30%;
-}
 
 .square-outline {
     position: fixed;
@@ -37,8 +31,68 @@ p {
 
 @media (max-width: 600px) {
     .square-outline {
-        width: 12vw;
-        height: 12vw;
         border: 1px solid white;
     }
+}
+
+.reveal-toggle {
+    display: none;
+}
+
+.text-wrapper {
+    position: relative;
+    margin: 50px 30%;
+}
+
+.open-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    background-color: white;
+    color: black;
+    font-family: courier;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.open-button:hover {
+    background-color: black;
+    color: white;
+}
+
+.typing-text {
+    color: white;
+    font-size: 14px;
+    text-align: left;
+    margin: 0;
+    display: none;
+    background-color: black;
+    padding: 15px;
+}
+
+.reveal-toggle:checked ~ .text-wrapper .typing-text {
+    display: block;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.reveal-toggle:checked ~ .text-wrapper .open-button {
+    background-color: black;
+    color: white;
+    border: 2px solid white;
 }
