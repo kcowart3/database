@@ -3,25 +3,27 @@
 }
 
 body {
+    background-color: black;
     background-image: url(darkforest.jpg);
-    background-size: cover;
+    background-size: 100vw auto;
+    background-attachment: fixed;
+    background-position: center top;
+    background-repeat: no-repeat;
 }
 
 p {
     color: white;
     font-size: 14px;
     text-align: left;
-    margin-right: 204px;
-    margin-left: 204px;
-    margin-bottom: 25px;
+    margin: 50px 30%;
 }
 
 .square-outline {
-    position: absolute;
+    position: fixed;
     left: var(--x);
     top: var(--y);
-    width: 100px;
-    height: 100px;
+    width: 6vw;
+    height: 6vw;
     border: 2px solid white;
     background-color: transparent;
     transition: background-color 0.5s ease;
@@ -31,4 +33,12 @@ p {
 .square-outline:hover {
     background-color: white;
     mix-blend-mode: difference;
+}
+
+@media (max-width: 600px) {
+    .square-outline {
+        width: 12vw;
+        height: 12vw;
+        border: 1px solid white;
+    }
 }
