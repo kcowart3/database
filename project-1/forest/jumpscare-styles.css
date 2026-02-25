@@ -1,0 +1,98 @@
+* {
+    box-sizing: border-box;
+    font-family: courier, monospace;
+}
+
+body {
+    margin: 0;
+    background-color: white;
+    color: black;
+}
+
+.jumpscare-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.jumpscare-image {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100vh;
+    width: auto;
+    object-fit: cover;
+    animation: shake 0.08s linear infinite;
+}
+
+.run-link {
+    position: absolute;
+    bottom: 25vh;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 24px 72px;
+    font-size: 56px;
+    background-color: transparent;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    animation: flashText 0.15s steps(1, end) infinite;
+}
+
+.miss-text {
+    position: absolute;
+    top: 0;
+    height: 100vh;
+    width: 18vw;
+    color: black;
+    font-size: 100px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    pointer-events: none;
+}
+
+.miss-left {
+    left: 0;
+}
+
+.miss-right {
+    right: 0;
+}
+
+@keyframes flashText {
+    0%, 49% {
+        color: black;
+    }
+    50%, 100% {
+        color: white;
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(-50%) translateY(0);
+    }
+    25% {
+        transform: translateX(calc(-50% + 2px)) translateY(-1px);
+    }
+    50% {
+        transform: translateX(calc(-50% - 2px)) translateY(1px);
+    }
+    75% {
+        transform: translateX(calc(-50% + 1px)) translateY(-1px);
+    }
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+

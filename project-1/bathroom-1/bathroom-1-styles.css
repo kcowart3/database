@@ -1,21 +1,83 @@
-* {
-    background-color: yellow;
+body {
+    background-image: url(bathroom-1.png);
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
+    background-repeat: no-repeat;
+    font-family: courier;
+    color: white;
+}
+
+.main-text {
+    font-size: 14px;
+    text-align: left;
+    margin: 20% 20% 25px 50%;
+}
+
+b, .word {
+    color: rgb(0, 71, 187);
+}
+
+.reveal-toggle {
+    display: none;
+}
+
+.text-wrapper {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    margin-right: 67%;
+}
+
+.open-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    background-color: white;
     color: black;
-    font-family: monospace;
-}
-
-  .container {
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
     display: flex;
-    justify-content: center;
-    align-content: center;
-    height: 100vh;
     align-items: center;
+    justify-content: center;
+    z-index: 100;
 }
 
-.poem{
-    display: inline-block;
-    width: 500px;
-    height:50%;
-    margin:10px auto;
+.open-button:hover {
+    background-color: black;
+    color: white;
+}
+
+.typing-text {
+    color: white;
+    font-size: 14px;
+    text-align: left;
+    margin: 0;
+    display: none;
+    background-color: black;
+    padding: 15px;
+}
+
+.reveal-toggle:checked ~ .text-wrapper .typing-text {
+    display: block;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.reveal-toggle:checked ~ .text-wrapper .open-button {
+    background-color: black;
+    color: white;
+    border: 2px solid white;
 }
 
