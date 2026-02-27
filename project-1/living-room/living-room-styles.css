@@ -84,3 +84,41 @@ b, .word { /* make the word "house" blue */
     border: 2px solid white;
 }
 
+@media (max-width: 768px) {
+    .main-text {
+        font-size: 12px;
+        margin: 5% 25% 20px 20px;
+    }
+    .text-wrapper {
+        margin: 10px 25% 25px 20px;
+    }
+    .typing-text {
+        font-size: 12px;
+        padding: 12px;
+    }
+    .open-button {
+        width: 10px;
+        height: 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-text {
+        font-size: 11px;
+        margin: 5% 10% 15px 10px;
+    }
+    .text-wrapper {
+        margin: 10px 10px 25px 10%;
+        width: 85%;
+    }
+    .typing-text {
+        font-size: 11px;
+        padding: 10px;
+    }
+    .open-button {
+        width: 10px;
+        height: 10px;
+        font-size: 11px;
+    }
+}

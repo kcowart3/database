@@ -109,6 +109,11 @@ b, .word { /* make the word "house" blue */
     margin-bottom: 10px;
 }
 
+.footer a {
+    text-decoration: none;
+    color: black;
+}
+
 main img {
     display: block;
     width: 450px;
@@ -193,8 +198,61 @@ a:hover { /* when the mouse is over the link, make the text white */
 }
 
 
-  @media (max-width: 600px) {
-    * {
-        font-size: 14px;  /* smaller font on mobile */
+@media (max-width: 768px) {
+    .paragraph {
+        font-size: 12px;
+        margin: 0 10% 20px;
+    }
+    .text-wrapper {
+        margin: 0 10% 20px;
+    }
+    .typing-text {
+        font-size: 12px;
+        padding: 12px;
+    }
+    main img {
+        width: 100%;
+        max-width: 350px;
+    }
+    .house-container img {
+        width: 100%;
+        max-width: 400px;
+    }
+    .house-overlay {
+        font-size: 12px;
+    }
+    .footer {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-bottom: 100px;
+    }
+    .paragraph {
+        font-size: 11px;
+        margin: 0 5% 15px;
+    }
+    .text-wrapper {
+        margin: 0 5% 15px;
+    }
+    .typing-text {
+        font-size: 11px;
+        padding: 10px;
+    }
+    main img {
+        max-width: 280px;
+    }
+    .house-container img {
+        max-width: 300px;
+    }
+    .open-button {
+        width: 10px;
+        height: 10px;
+        font-size: 12px;
+    }
+    h1 {
+        font-size: 1.2rem;
     }
 }

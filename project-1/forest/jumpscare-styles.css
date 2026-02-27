@@ -3,6 +3,10 @@
     font-family: courier, monospace;
 }
 
+b, .word {
+    color: rgb(0, 71, 187);
+}
+
 body {
     margin: 0;
     background-color: white;
@@ -95,4 +99,34 @@ body {
     }
 }
 
+@media (max-width: 768px) {
+    .jumpscare-image {
+        width: 100%;
+        height: auto;
+        max-height: 100vh;
+        object-fit: contain;
+    }
+    .run-link {
+        font-size: 36px;
+        padding: 18px 48px;
+        bottom: 20vh;
+    }
+    .miss-text {
+        font-size: 48px;
+        width: 15vw;
+    }
+}
 
+@media (max-width: 480px) {
+    .run-link {
+        font-size: 24px;
+        padding: 14px 32px;
+        bottom: 15vh;
+        letter-spacing: 2px;
+    }
+    .miss-text {
+        font-size: 28px;
+        width: 12vw;
+        padding: 4px;
+    }
+}

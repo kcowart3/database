@@ -83,3 +83,47 @@ b, .word {
     border: 2px solid white;
 }
 
+@media (max-width: 768px) {
+    .main-text {
+        font-size: 12px;
+        margin: 5% 30% 20px 15px;
+    }
+    .text-wrapper {
+        top: 35%;
+        left: 15px;
+        margin-left: 15px;
+        margin-right: 35%;
+    }
+    .typing-text {
+        font-size: 12px;
+        padding: 12px;
+    }
+    .open-button {
+        width: 10px;
+        height: 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-text {
+        font-size: 11px;
+        margin: 5% 5% 15px 10px;
+    }
+    .text-wrapper {
+        position: relative;
+        top: auto;
+        left: 10px;
+        margin: 15px 10px;
+        width: calc(100% - 20px);
+    }
+    .typing-text {
+        font-size: 11px;
+        padding: 10px;
+    }
+    .open-button {
+        width: 10px;
+        height: 10px;
+        font-size: 11px;
+    }
+}

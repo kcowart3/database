@@ -3,6 +3,10 @@
     font-family: courier, monospace;
 }
 
+b, .word {
+    color: rgb(0, 71, 187);
+}
+
 body {
     margin: 0;
     background-color: white;
@@ -87,4 +91,41 @@ body {
 
 .return-link a:hover {
     opacity: 0;
+}
+
+@media (max-width: 768px) {
+    .sanctuary-container {
+        padding: 16px;
+    }
+    .sanctuary-box {
+        width: 90vw;
+        padding: 20px 24px;
+    }
+    .sanctuary-text {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    .return-link a {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sanctuary-container {
+        padding: 12px;
+    }
+    .sanctuary-box {
+        width: 95vw;
+        padding: 16px 18px;
+    }
+    .sanctuary-text {
+        font-size: 12px;
+        line-height: 1.4;
+    }
+    .return-link {
+        margin: 12px auto 0;
+    }
+    .return-link a {
+        font-size: 12px;
+    }
 }

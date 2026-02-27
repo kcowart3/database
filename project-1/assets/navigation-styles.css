@@ -74,11 +74,31 @@ a.room-link:hover text {
     fill: rgb(0, 71, 187);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .schematic-container {
+        padding: 15px;
+    }
     .schematic-title {
-        font-size: 12px;
+        font-size: 13px;
+        margin-bottom: 15px;
     }
     .schematic-wrapper {
         max-width: 100%;
+    }
+    a.room-link text {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .schematic-container {
+        padding: 10px;
+    }
+    .schematic-title {
+        font-size: 11px;
+        margin-bottom: 10px;
+    }
+    a.room-link text {
+        font-size: 8px;
     }
 }

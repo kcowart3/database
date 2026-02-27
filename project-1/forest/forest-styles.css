@@ -2,6 +2,10 @@
     font-family: courier;
 }
 
+b, .word {
+    color: rgb(0, 71, 187);
+}
+
 body {
     background-color: black;
     background-image: url(darkforest.jpg);
@@ -29,9 +33,54 @@ body {
     mix-blend-mode: difference;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .square-outline {
+        width: 8vw;
+        height: 8vw;
         border: 1px solid white;
+    }
+    .text-wrapper {
+        margin: 30px 15%;
+    }
+    .typing-text {
+        font-size: 12px;
+        padding: 12px;
+    }
+    .open-button {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        font-size: 12px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@media (max-width: 480px) {
+    .square-outline {
+        width: 10vw;
+        height: 10vw;
+        border: 1px solid white;
+        min-width: 36px;
+        min-height: 36px;
+    }
+    .text-wrapper {
+        margin: 20px 5%;
+        width: 90%;
+    }
+    .typing-text {
+        font-size: 11px;
+        padding: 10px;
+    }
+    .open-button {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        font-size: 11px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 }
 
@@ -95,4 +144,15 @@ body {
     background-color: black;
     color: white;
     border: 2px solid white;
+}
+
+/* Door positioning - bottom left and right corners like other rooms */
+.door-container {
+    bottom: 20px;
+}
+.door-container.door-left {
+    left: 20px;
+}
+.door-container.door-right {
+    right: 20px;
 }

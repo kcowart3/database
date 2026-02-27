@@ -1,5 +1,9 @@
 /* Shared door animation styles for all rooms */
 
+b, .word {
+    color: rgb(0, 71, 187);
+}
+
 .door-container {
     position: fixed;
     bottom: 20px;
@@ -111,4 +115,72 @@
     border: none;
     padding: 0;
     margin: 0;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-bottom: 130px;
+    }
+    .door-container {
+        width: 60px;
+        height: 105px;
+        bottom: 15px;
+    }
+    .door-frame {
+        width: 60px;
+        height: 105px;
+    }
+    .door-shape {
+        top: 6px;
+        left: 6px;
+        width: 48px;
+        height: 93px;
+    }
+    .door-container.door-left {
+        left: 10px;
+    }
+    .door-container.door-right {
+        right: 10px;
+    }
+    .door-handle {
+        width: 6px;
+        height: 6px;
+    }
+    .door-overlay {
+        font-size: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-bottom: 110px;
+    }
+    .door-container {
+        width: 50px;
+        height: 88px;
+        bottom: 10px;
+    }
+    .door-frame {
+        width: 50px;
+        height: 88px;
+    }
+    .door-shape {
+        top: 5px;
+        left: 5px;
+        width: 40px;
+        height: 78px;
+    }
+    .door-container.door-left {
+        left: 8px;
+    }
+    .door-container.door-right {
+        right: 8px;
+    }
+    .door-handle {
+        width: 5px;
+        height: 5px;
+    }
+    .door-overlay {
+        font-size: 7px;
+    }
 }
