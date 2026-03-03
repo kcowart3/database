@@ -19,7 +19,7 @@ b, .word { /* make the word "house" blue */
 .main-text {
     font-size: 14px;
     text-align: left;
-    margin: 5% 60px 10px 55%;
+    margin: 2% 60px 10px 55%;
 }
 
 .reveal-toggle {
