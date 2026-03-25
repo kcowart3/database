@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>Fantaclean Todo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <img
+      class="topSplashLogo"
+      src="images/Fantaclean%20splash-02.jpg"
+      alt=""
+      aria-hidden="true"
+      draggable="false"
+    />
+
+    <!-- Splash screen (fades away into the game UI) -->
+    <section id="splashScreen" class="screen splashScreen" aria-label="Splash screen">
+      <div class="splashFrame">
+        <img
+          class="splashImg"
+          src="images/Fantaclean splash.svg"
+          alt="Fantaclean splash"
+          draggable="false"
+        />
+      </div>
+      <div class="splashHint">Loading...</div>
+    </section>
+
+    <!-- Main app -->
+    <main id="appScreen" class="screen appScreen" aria-label="Fantaclean Todo app">
+      <section class="appContent">
+
+
+        <div class="centerStack">
+          <button id="btnGoCustomize" class="btn btnSmall btnGhost" type="button">
+            Customize Avatar
+          </button>
+
+          <div class="avatarBlock" id="avatarBlock">
+            <div class="avatarFrame" aria-label="Your avatar">
+              <img
+                id="avatarImg"
+                class="avatarImg"
+                src="images/Fantaclean-01.svg"
+                alt="Fantaclean avatar"
+                draggable="false"
+              />
+              <div class="avatarGlow" aria-hidden="true"></div>
+            </div>
+
+            <div class="avatarMeta">
+              <div class="avatarNameRow">
+                <div id="designLabel" class="designLabel">Design 01</div>
+              </div>
+              <div id="designLockHint" class="designHint">Complete tasks to unlock new designs.</div>
+            </div>
+          </div>
+
+          <div class="xpStage">
+            <div class="levelHeader">
+              <div class="levelLeft">
+                <div id="levelLabel" class="tinyLabel">LEVEL</div>
+                <div id="levelValue" class="levelValue">1</div>
+              </div>
+            </div>
+
+            <div class="xpProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="xpProgressFill" id="xpProgressFill"></div>
+            </div>
+
+            <div class="xpNumbers">
+              <span id="xpInLevel">0 XP</span>
+              <span id="xpToNext">to next</span>
+            </div>
+          </div>
+
+          <button id="btnGoTodos" class="btn btnPrimary btnTodo" type="button">
+            My To-Do List
+          </button>
+
+          <!-- Screens inside main card -->
+          <section id="screenCustomize" class="subScreen hidden" aria-label="Avatar customization">
+            <div class="subHeader">
+              <div class="subTitle">Avatar Designs</div>
+              <button id="btnBackFromCustomize" class="btn btnGhost" type="button">Back</button>
+            </div>
+
+            <div id="designGrid" class="designGrid" aria-live="polite"></div>
+
+            <div class="divider"></div>
+            <div class="settingsRow">
+              <button id="btnResetProgress" class="btn btnDanger" type="button">
+                Reset Progress
+              </button>
+              <div class="settingsNote">Resets XP, tasks, and unlocked designs.</div>
+            </div>
+          </section>
+
+          <section id="screenTodos" class="subScreen hidden" aria-label="Todo list">
+            <div class="subHeader">
+              <div class="subTitle">Tasks</div>
+              <button id="btnBackFromTodos" class="btn btnGhost" type="button">Back</button>
+            </div>
+
+            <div class="todoActions">
+              <button id="btnClearOldTasks" class="btn btnGhost btnSmall" type="button">
+                Clear Old Tasks
+              </button>
+            </div>
+
+            <form id="taskForm" class="taskForm" autocomplete="off">
+              <label class="field">
+                <span class="fieldLabel">New Task</span>
+                <input
+                  id="taskInput"
+                  class="input"
+                  type="text"
+                  maxlength="60"
+                  placeholder="e.g. Study 30 minutes"
+                  required
+                />
+              </label>
+
+              <label class="field fieldSmall">
+                <span class="fieldLabel">XP Reward</span>
+                <select id="xpSelect" class="select">
+                  <option value="50">50 XP</option>
+                  <option value="100" selected>100 XP</option>
+                  <option value="200">200 XP</option>
+                  <option value="levelUpTest">Level Up (Test)</option>
+                  <option value="levelUpTo10">Level Up to 10 (Test)</option>
+                  <option value="levelUpTo20">Level Up to 20 (Test)</option>
+                  <option value="levelUpTo30">Level Up to 30 (Test)</option>
+                </select>
+              </label>
+
+              <button class="btn btnPrimary" type="submit">Add Task</button>
+            </form>
+
+            <div class="taskListWrap">
+              <ul id="taskList" class="taskList" aria-live="polite"></ul>
+              <div id="taskEmpty" class="emptyState">
+                No tasks yet. Add one above to start earning XP.
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+    </main>
+  </body>
+  <script src="app.js"></script>
+</html>
+

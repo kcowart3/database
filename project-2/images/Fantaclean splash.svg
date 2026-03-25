@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 200">
+  <defs>
+    <style>
+      .text-part { 
+        fill: #0f380f; 
+        font-family: 'Arial Black', Arial, sans-serif; 
+        font-size: 72px; 
+        font-weight: 900;
+        letter-spacing: -2px;
+      }
+      
+      .sword-blade { fill: #0f380f; }
+      .sword-guard { fill: #0f380f; }
+      .sword-handle { fill: #1a4d1a; }
+      
+      /* Sword drops from above and lands with bounce */
+      @keyframes swordDrop {
+        0% { transform: translate(295px, -250px) scale(1, -1); }
+        35% { transform: translate(295px, 81px) scale(1, -1); }
+        42% { transform: translate(295px, 86px) scale(1, -1); }
+        48% { transform: translate(295px, 81px) scale(1, -1); }
+        54% { transform: translate(295px, 83px) scale(1, -1); }
+        60%, 100% { transform: translate(295px, 81px) scale(1, -1); }
+      }
+      
+      /* Sword flashes when it lands */
+      @keyframes swordFlash {
+        0%, 34% { filter: brightness(1); }
+        35% { filter: brightness(3); }
+        37% { filter: brightness(1); }
+        39% { filter: brightness(2.5); }
+        41% { filter: brightness(1); }
+        43% { filter: brightness(2); }
+        45% { filter: brightness(1); }
+        47% { filter: brightness(1.7); }
+        50%, 100% { filter: brightness(1); }
+      }
+      
+      /* Text shakes and flashes bright when sword lands */
+      @keyframes textShakeFlash {
+        0%, 33% { transform: translate(0, 0); fill: #0f380f; filter: brightness(1); }
+        35% { transform: translate(-3px, 2px); fill: #f0ff00; filter: brightness(2.5); }
+        37% { transform: translate(3px, -2px); fill: #0f380f; filter: brightness(1); }
+        39% { transform: translate(-2px, -1px); fill: #f0ff00; filter: brightness(2.5); }
+        41% { transform: translate(2px, 1px); fill: #0f380f; filter: brightness(1); }
+        43% { transform: translate(-1px, 1px); fill: #f0ff00; filter: brightness(2.3); }
+        45% { transform: translate(1px, -1px); fill: #0f380f; filter: brightness(1); }
+        47% { transform: translate(-1px, 0px); fill: #9bbc0f; filter: brightness(2); }
+        50%, 100% { transform: translate(0, 0); fill: #0f380f; filter: brightness(1); }
+      }
+      
+      .sword-group {
+        animation: swordDrop 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards, swordFlash 2s ease-out forwards;
+      }
+      
+      .text-part {
+        animation: textShakeFlash 2s ease-out forwards;
+      }
+    </style>
+  </defs>
+  
+  <!-- Text with shake and flash animation -->
+  <!-- ADJUST TEXT SPACING: Change the x values below to move letters left/right. Smaller difference = closer together -->
+  <text class="text-part" x="120" y="120">FAN</text>
+  <text class="text-part" x="310" y="120">ACLEAN</text>
+  
+  <!-- Sword dropping from above (positioned as the "T") -->
+  <!-- ADJUST SWORD POSITION: Modify the translate(295px, 81px) values in the @keyframes swordDrop animation above (line ~22-28) -->
+  <g class="sword-group">
+    <!-- Sword tip (now pointing down) -->
+    <polygon class="sword-blade" points="0,-55 -6,-50 6,-50"/>
+    
+    <!-- Blade -->
+    <rect class="sword-blade" x="-5" y="-50" width="10" height="55" rx="1"/>
+    
+    <!-- Guard (crossguard) -->
+    <rect class="sword-guard" x="-18" y="5" width="36" height="6" rx="1"/>
+    <rect class="sword-guard" x="-20" y="3" width="40" height="2"/>
+    <rect class="sword-guard" x="-20" y="11" width="40" height="2"/>
+    
+    <!-- Handle grip -->
+    <rect class="sword-handle" x="-4" y="13" width="8" height="20" rx="1"/>
+    <rect class="sword-guard" x="-4" y="17" width="8" height="1"/>
+    <rect class="sword-guard" x="-4" y="22" width="8" height="1"/>
+    <rect class="sword-guard" x="-4" y="27" width="8" height="1"/>
+    
+    <!-- Pommel -->
+    <rect class="sword-guard" x="-6" y="33" width="12" height="6" rx="2"/>
+  </g>
+</svg>
