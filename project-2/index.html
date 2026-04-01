@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="dark" />
     <title>Fantaclean Todo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -21,12 +24,13 @@
       <div class="splashFrame">
         <img
           class="splashImg"
-          src="images/Fantaclean splash.svg"
-          alt="Fantaclean splash"
+          src="images/FClogo_splash.svg"
+          alt="Fantaclean logo splash"
           draggable="false"
         />
       </div>
       <div class="splashHint">Loading...</div>
+      <div class="splashDisclaimer">Early version, all things subject to change.</div>
     </section>
 
     <!-- Main app -->
@@ -35,9 +39,14 @@
 
 
         <div class="centerStack">
-          <button id="btnGoCustomize" class="btn btnSmall btnGhost" type="button">
-            Customize Avatar
-          </button>
+          <div class="buttonRow">
+            <button id="btnGoCustomize" class="btn btnSmall btnGhost" type="button">
+              Upgrade
+            </button>
+            <button id="btnGoChangeClass" class="btn btnSmall btnGhost" type="button">
+              Class
+            </button>
+          </div>
 
           <div class="avatarBlock" id="avatarBlock">
             <div class="avatarFrame" aria-label="Your avatar">
@@ -55,7 +64,7 @@
               <div class="avatarNameRow">
                 <div id="designLabel" class="designLabel">Design 01</div>
               </div>
-              <div id="designLockHint" class="designHint">Complete tasks to unlock new designs.</div>
+              <div id="designLockHint" class="designHint">Complete tasks to upgrade your class.</div>
             </div>
           </div>
 
@@ -97,6 +106,15 @@
               </button>
               <div class="settingsNote">Resets XP, tasks, and unlocked designs.</div>
             </div>
+          </section>
+
+          <section id="screenChangeClass" class="subScreen hidden" aria-label="Change class">
+            <div class="subHeader">
+              <div class="subTitle">Change Class</div>
+              <button id="btnBackFromChangeClass" class="btn btnGhost" type="button">Back</button>
+            </div>
+            
+            <div id="classGrid" class="classGrid"></div>
           </section>
 
           <section id="screenTodos" class="subScreen hidden" aria-label="Todo list">

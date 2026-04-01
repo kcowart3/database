@@ -2,17 +2,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 200">
   <defs>
     <style>
+      .bg-a { fill: #1a0f2e; }
+      .bg-b { fill: #2d1b4e; }
+      .bg-scan { fill: rgba(255,107,157,0.08); }
+
       .text-part { 
-        fill: #0f380f; 
-        font-family: 'Arial Black', Arial, sans-serif; 
+        fill: #00e5ff; 
+        font-family: 'Press Start 2P', 'Arial Black', Arial, sans-serif; 
         font-size: 72px; 
         font-weight: 900;
         letter-spacing: -2px;
+        filter: drop-shadow(0 0 8px rgba(0,229,255,0.8)) drop-shadow(0 0 16px rgba(0,229,255,0.5));
       }
       
-      .sword-blade { fill: #0f380f; }
-      .sword-guard { fill: #0f380f; }
-      .sword-handle { fill: #1a4d1a; }
+      .sword-blade { fill: #ff6b9d; filter: drop-shadow(0 0 6px rgba(255,107,157,0.6)); }
+      .sword-guard { fill: #00e5ff; filter: drop-shadow(0 0 6px rgba(0,229,255,0.6)); }
+      .sword-handle { fill: #ff6b9d; }
       
       /* Sword drops from above and lands with bounce */
       @keyframes swordDrop {
@@ -39,26 +44,31 @@
       
       /* Text shakes and flashes bright when sword lands */
       @keyframes textShakeFlash {
-        0%, 33% { transform: translate(0, 0); fill: #0f380f; filter: brightness(1); }
-        35% { transform: translate(-3px, 2px); fill: #f0ff00; filter: brightness(2.5); }
-        37% { transform: translate(3px, -2px); fill: #0f380f; filter: brightness(1); }
-        39% { transform: translate(-2px, -1px); fill: #f0ff00; filter: brightness(2.5); }
-        41% { transform: translate(2px, 1px); fill: #0f380f; filter: brightness(1); }
-        43% { transform: translate(-1px, 1px); fill: #f0ff00; filter: brightness(2.3); }
-        45% { transform: translate(1px, -1px); fill: #0f380f; filter: brightness(1); }
-        47% { transform: translate(-1px, 0px); fill: #9bbc0f; filter: brightness(2); }
-        50%, 100% { transform: translate(0, 0); fill: #0f380f; filter: brightness(1); }
+        0%, 33% { transform: translate(0, 0); fill: #00e5ff; filter: drop-shadow(0 0 8px rgba(0,229,255,0.8)) brightness(1); }
+        35% { transform: translate(-3px, 2px); fill: #ff6b9d; filter: drop-shadow(0 0 12px rgba(255,107,157,1)) brightness(2.5); }
+        37% { transform: translate(3px, -2px); fill: #00e5ff; filter: drop-shadow(0 0 8px rgba(0,229,255,0.8)) brightness(1); }
+        39% { transform: translate(-2px, -1px); fill: #ff6b9d; filter: drop-shadow(0 0 12px rgba(255,107,157,1)) brightness(2.5); }
+        41% { transform: translate(2px, 1px); fill: #00e5ff; filter: drop-shadow(0 0 8px rgba(0,229,255,0.8)) brightness(1); }
+        43% { transform: translate(-1px, 1px); fill: #ff6b9d; filter: drop-shadow(0 0 10px rgba(255,107,157,0.9)) brightness(2.3); }
+        45% { transform: translate(1px, -1px); fill: #00e5ff; filter: drop-shadow(0 0 8px rgba(0,229,255,0.8)) brightness(1); }
+        47% { transform: translate(-1px, 0px); fill: #ff6b9d; filter: drop-shadow(0 0 10px rgba(255,107,157,0.9)) brightness(2); }
+        50%, 100% { transform: translate(0, 0); fill: #00e5ff; filter: drop-shadow(0 0 8px rgba(0,229,255,0.8)) brightness(1); }
       }
       
       .sword-group {
-        animation: swordDrop 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards, swordFlash 2s ease-out forwards;
+        animation: swordDrop 2s steps(16) forwards, swordFlash 2s steps(12) forwards;
       }
       
       .text-part {
-        animation: textShakeFlash 2s ease-out forwards;
+        animation: textShakeFlash 2s steps(12) forwards;
       }
     </style>
   </defs>
+
+  <!-- Palette-matched background (instead of flat black look) -->
+  <rect class="bg-a" x="0" y="0" width="700" height="200"/>
+  <rect class="bg-b" x="0" y="0" width="700" height="200" opacity="0.55"/>
+  <rect class="bg-scan" x="0" y="0" width="700" height="200"/>
   
   <!-- Text with shake and flash animation -->
   <!-- ADJUST TEXT SPACING: Change the x values below to move letters left/right. Smaller difference = closer together -->

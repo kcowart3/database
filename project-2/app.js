@@ -12,6 +12,8 @@ const MAX_LEVEL = 80;
 // Rewarded once per task (rewarded flag prevents double-award).
 const DEFAULT_STATE = {
   xp: 0,
+  classXp: { knight: 0, teacher: 0 },
+  currentClassId: "knight",
   tasks: [],
   currentDesignId: 0,
   // Avatar name / look is purely derived from design id below.
@@ -20,51 +22,59 @@ const DEFAULT_STATE = {
   lastShownUnlockCount: 1
 };
 
+const CLASS_DATA = [
+  { id: "knight", name: "Knight", imgSrc: null, locked: false, hasUpgrades: true },
+  { id: "teacher", name: "Teacher", imgSrc: "images/HiddenClass.svg", locked: false, hasUpgrades: false },
+  { id: "cleric", name: "Cleric", imgSrc: "images/Danger.svg", locked: true, hasUpgrades: false },
+  { id: "wizard", name: "Wizard", imgSrc: "images/Danger.svg", locked: true, hasUpgrades: false },
+  { id: "rogue", name: "Rogue", imgSrc: "images/Danger.svg", locked: true, hasUpgrades: false }
+];
+
 const DESIGNS = [
   {
     id: 0,
-    name: "Silver armor",
+    name: "Silver Knight",
     unlockLevel: 1,
     imgSrc: "images/Fantaclean-01.svg",
-    hiddenInGrid: true,
+    hiddenInGrid: false,
     frameHue: 0,
-    hue: 0,
-    sat: 1,
-    contrast: 1,
-    brightness: 1
+    hue: 180,
+    sat: 1.4,
+    contrast: 1.15,
+    brightness: 1.1
   },
   {
     id: 1,
-    name: "Upgraded Silver Armor",
+    name: "Horned Knight",
     unlockLevel: 10,
     imgSrc: "images/Fantaclean-level2.svg",
-    frameHue: 190,
-    hue: 0,
-    sat: 1,
-    contrast: 1,
-    brightness: 1
+    frameHue: 330,
+    hue: 340,
+    sat: 1.6,
+    contrast: 1.2,
+    brightness: 1.15
   },
   {
     id: 2,
-    name: "Refined Armor",
+    name: "Crimson Knight",
     unlockLevel: 20,
     imgSrc: "images/Fantaclean-level3.svg",
-    frameHue: 260,
-    hue: 0,
-    sat: 1,
-    contrast: 1,
-    brightness: 1
+    frameHue: 280,
+    hue: 280,
+    sat: 1.5,
+    contrast: 1.2,
+    brightness: 1.2
   },
   {
     id: 3,
-    name: "Mastercrafted Armor",
+    name: "Champion Knight",
     unlockLevel: 30,
     imgSrc: "images/Fantaclean-level4.svg",
-    frameHue: 32,
-    hue: 0,
-    sat: 1,
-    contrast: 1,
-    brightness: 1
+    frameHue: 45,
+    hue: 40,
+    sat: 2.2,
+    contrast: 1.3,
+    brightness: 1.5
   }
 ];
 
@@ -134,16 +144,30 @@ function getBestUnlockedDesignId(level) {
   return unlocked.slice().sort((a, b) => b.unlockLevel - a.unlockLevel)[0]?.id ?? 0;
 }
 
+function getClassById(classId) {
+  return CLASS_DATA.find((c) => c.id === classId) || CLASS_DATA[0];
+}
+
+function isKnightClass() {
+  return state.currentClassId === "knight";
+}
+
+function getClassXp(classId) {
+  const xp = Number(state.classXp?.[classId]);
+  return Number.isFinite(xp) ? Math.max(0, xp) : 0;
+}
+
+function getCurrentXp() {
+  return getClassXp(state.currentClassId);
+}
+
+function setCurrentXp(xp) {
+  if (!state.classXp || typeof state.classXp !== "object") state.classXp = { knight: 0, teacher: 0 };
+  state.classXp[state.currentClassId] = Math.max(0, Number.isFinite(xp) ? xp : 0);
+}
+
 function setDesignOnAvatar(designId) {
   const design = DESIGNS.find((d) => d.id === designId) || DESIGNS[0];
-
-  // Update CSS custom properties for image filters.
-  // Used by CSS `hsl(var(--frame-hue) ...)` so keep it numeric (no unit).
-  document.documentElement.style.setProperty("--frame-hue", `${design.frameHue ?? 182}`);
-  document.documentElement.style.setProperty("--design-hue", `${design.hue}deg`);
-  document.documentElement.style.setProperty("--design-sat", design.sat);
-  document.documentElement.style.setProperty("--design-contrast", design.contrast);
-  document.documentElement.style.setProperty("--design-brightness", design.brightness);
 
   const avatarImg = document.getElementById("avatarImg");
   if (avatarImg && design.imgSrc) avatarImg.src = design.imgSrc;
@@ -151,6 +175,18 @@ function setDesignOnAvatar(designId) {
   const designLabel = document.getElementById("designLabel");
 
   if (designLabel) designLabel.textContent = design.name;
+}
+
+function applyClassToAvatar() {
+  if (isKnightClass()) {
+    setDesignOnAvatar(state.currentDesignId);
+    return;
+  }
+
+  const avatarImg = document.getElementById("avatarImg");
+  const designLabel = document.getElementById("designLabel");
+  if (avatarImg) avatarImg.src = "images/HiddenClass.svg";
+  if (designLabel) designLabel.textContent = "Teacher";
 }
 
 function uid() {
@@ -165,6 +201,13 @@ function loadState() {
 
   const merged = { ...DEFAULT_STATE, ...parsed };
   merged.xp = Number.isFinite(merged.xp) ? merged.xp : 0;
+  const parsedClassXp = merged.classXp && typeof merged.classXp === "object" ? merged.classXp : {};
+  merged.classXp = {
+    knight: Number.isFinite(Number(parsedClassXp.knight)) ? Number(parsedClassXp.knight) : merged.xp,
+    teacher: Number.isFinite(Number(parsedClassXp.teacher)) ? Number(parsedClassXp.teacher) : 0
+  };
+  merged.currentClassId = typeof merged.currentClassId === "string" ? merged.currentClassId : "knight";
+  if (!CLASS_DATA.some((c) => c.id === merged.currentClassId)) merged.currentClassId = "knight";
   merged.tasks = Array.isArray(merged.tasks)
     ? merged.tasks.map((t) => {
         const xpAwarded = Number(t?.xpAwarded);
@@ -201,13 +244,9 @@ function formatXp(n) {
   return `${Math.max(0, Math.floor(n))} XP`;
 }
 
-function updateTopXpMini() {
-  const xpEl = document.getElementById("xpValue");
-  if (xpEl) xpEl.textContent = Math.floor(state.xp);
-}
-
 function renderProgress() {
-  const { level, progress, nextRequirementXp, currentStart } = getLevelProgress(state.xp);
+  const currentXp = getCurrentXp();
+  const { level, progress, nextRequirementXp, currentStart } = getLevelProgress(currentXp);
 
   const levelValue = document.getElementById("levelValue");
   const levelLabel = document.getElementById("levelLabel");
@@ -216,9 +255,14 @@ function renderProgress() {
   const xpToNext = document.getElementById("xpToNext");
   const fill = document.getElementById("xpProgressFill");
   const lockHint = document.getElementById("designLockHint");
+  const btnGoCustomize = document.getElementById("btnGoCustomize");
+  if (btnGoCustomize) {
+    btnGoCustomize.disabled = !isKnightClass();
+    btnGoCustomize.textContent = isKnightClass() ? "upgrade." : "no upgrades";
+  }
 
   // Track level changes for flash animation - only flash if not shown yet for this level
-  const levelChanged = level > state.lastFlashedLevel;
+  const levelChanged = isKnightClass() && level > state.lastFlashedLevel;
 
   if (levelValue) {
     levelValue.textContent = String(level);
@@ -242,22 +286,23 @@ function renderProgress() {
   
   if (nextReq) nextReq.textContent = `${formatXp(nextRequirementXp)}`;
 
-  const xpInThisLevel = state.xp - currentStart;
+  const xpInThisLevel = currentXp - currentStart;
   const xpNeed = nextRequirementXp - currentStart;
 
   if (xpInLevel) xpInLevel.textContent = `${Math.max(0, Math.floor(xpInThisLevel))} XP in this level`;
   if (xpToNext) xpToNext.textContent = `to next: ${Math.max(0, Math.floor(xpNeed))} XP`;
   if (fill) fill.style.width = `${Math.round(progress * 100)}%`;
 
-  const unlockedDesignIds = getUnlockedDesignIdsByLevel(level);
+  const unlockedDesignIds = isKnightClass() ? getUnlockedDesignIdsByLevel(level) : [0];
   
   // Track new unlocks for flash animation - only show if not already shown for this unlock count
   const newUnlock = unlockedDesignIds.length > state.lastShownUnlockCount;
   
   renderDesignGrid(unlockedDesignIds);
+  renderClassGrid();
 
   // Ensure current design stays within unlocked set.
-  if (!unlockedDesignIds.includes(state.currentDesignId)) {
+  if (isKnightClass() && !unlockedDesignIds.includes(state.currentDesignId)) {
     state.currentDesignId = getBestUnlockedDesignId(level);
     setDesignOnAvatar(state.currentDesignId);
     // Re-render so the active border matches the corrected design id.
@@ -266,7 +311,10 @@ function renderProgress() {
   
   // Show and flash unlock message only when new design unlocked (and not already shown)
   if (lockHint) {
-    if (newUnlock && state.currentDesignId > 0) {
+    if (!isKnightClass()) {
+      lockHint.textContent = "Professor class has no upgrades.";
+      lockHint.classList.remove("hidden", "flash");
+    } else if (newUnlock && state.currentDesignId > 0) {
       state.lastShownUnlockCount = unlockedDesignIds.length;
       saveState();
       
@@ -285,11 +333,89 @@ function renderProgress() {
   }
 }
 
+function renderClassGrid() {
+  const grid = document.getElementById("classGrid");
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  CLASS_DATA.forEach((classData) => {
+    const isActive = state.currentClassId === classData.id;
+    const card = document.createElement("div");
+    card.className = ["classCard", isActive ? "active" : "", classData.locked ? "locked" : ""]
+      .filter(Boolean)
+      .join(" ");
+    card.setAttribute("data-class", classData.id);
+
+    const preview = document.createElement("div");
+    preview.className = "classPreview";
+
+    const img = document.createElement("img");
+    if (isActive && classData.id === "knight") {
+      const currentDesign = DESIGNS.find((d) => d.id === state.currentDesignId) || DESIGNS[0];
+      img.src = currentDesign.imgSrc;
+      img.className = "classImg";
+    } else {
+      img.src = classData.imgSrc;
+      img.className = classData.locked ? "classDangerImg" : "classImg";
+    }
+    img.alt = classData.name;
+    img.draggable = false;
+    preview.appendChild(img);
+
+    const name = document.createElement("div");
+    name.className = "className";
+    name.textContent = classData.name;
+
+    card.appendChild(preview);
+    card.appendChild(name);
+
+    if (isActive) {
+      const { level } = getLevelProgress(getCurrentXp());
+      const currentDesign = DESIGNS.find((d) => d.id === state.currentDesignId) || DESIGNS[0];
+      
+      const meta = document.createElement("div");
+      meta.className = "classMeta";
+      if (classData.hasUpgrades) meta.innerHTML = `Level ${level}<br>${currentDesign.name}`;
+      else meta.innerHTML = `Level ${level}<br>No upgrades`;
+      card.appendChild(meta);
+    } else if (classData.locked) {
+      const lockMsg = document.createElement("div");
+      lockMsg.className = "classLockMsg";
+      lockMsg.textContent = "under development.";
+      card.appendChild(lockMsg);
+    }
+
+    if (classData.locked) {
+      card.addEventListener("click", () => {
+        card.style.animation = "none";
+        void card.offsetWidth;
+        card.style.animation = "classShakeFlash 600ms steps(8)";
+        setTimeout(() => {
+          card.style.animation = "";
+        }, 600);
+      });
+    } else {
+      card.addEventListener("click", () => {
+        if (state.currentClassId === classData.id) return;
+        state.currentClassId = classData.id;
+        saveState();
+        applyClassToAvatar();
+        renderProgress();
+        renderClassGrid();
+      });
+    }
+
+    grid.appendChild(card);
+  });
+}
+
 function renderDesignGrid(unlockedDesignIds) {
   const grid = document.getElementById("designGrid");
   if (!grid) return;
 
   grid.innerHTML = "";
+  if (!isKnightClass()) return;
 
   DESIGNS.forEach((design) => {
     // Base/default design is only shown as the avatar; it's not an unlockable "design card".
@@ -306,10 +432,6 @@ function renderDesignGrid(unlockedDesignIds) {
 
     const preview = document.createElement("div");
     preview.className = "designPreview";
-    preview.style.setProperty("--design-hue", `${design.hue}deg`);
-    preview.style.setProperty("--design-sat", design.sat);
-    preview.style.setProperty("--design-contrast", design.contrast);
-    preview.style.setProperty("--design-brightness", design.brightness);
 
     const img = document.createElement("img");
     img.src = design.imgSrc || "images/Fantaclean-01.svg";
@@ -334,8 +456,9 @@ function renderDesignGrid(unlockedDesignIds) {
       saveState();
       setDesignOnAvatar(state.currentDesignId);
       // Re-render to update active border state.
-      const { level } = getLevelProgress(state.xp);
+      const { level } = getLevelProgress(getCurrentXp());
       renderDesignGrid(getUnlockedDesignIdsByLevel(level));
+      renderClassGrid();
     });
 
     grid.appendChild(btn);
@@ -394,35 +517,35 @@ function renderTasks() {
         task.rewarded = true;
         if (task.xpAwardedMode === "levelUpTest") {
           // Force the player to reach the next level.
-          const { nextRequirementXp } = getLevelProgress(state.xp);
-          const xpToNext = nextRequirementXp - state.xp;
+          const currentXp = getCurrentXp();
+          const { nextRequirementXp } = getLevelProgress(currentXp);
+          const xpToNext = nextRequirementXp - currentXp;
           const earned = Math.max(1, Math.floor(xpToNext) + 1);
-          state.xp += earned;
+          setCurrentXp(currentXp + earned);
           task.xpAwarded = earned;
         } else if (task.xpAwardedMode === "levelUpTo10") {
-          const old = state.xp;
+          const old = getCurrentXp();
           const newXp = Math.max(old, getLevelStartXp(10) + 1);
-          state.xp = newXp;
+          setCurrentXp(newXp);
           task.xpAwarded = Math.max(0, newXp - old);
         } else if (task.xpAwardedMode === "levelUpTo20") {
-          const old = state.xp;
+          const old = getCurrentXp();
           const newXp = Math.max(old, getLevelStartXp(20) + 1);
-          state.xp = newXp;
+          setCurrentXp(newXp);
           task.xpAwarded = Math.max(0, newXp - old);
         } else if (task.xpAwardedMode === "levelUpTo30") {
-          const old = state.xp;
+          const old = getCurrentXp();
           const newXp = Math.max(old, getLevelStartXp(30) + 1);
-          state.xp = newXp;
+          setCurrentXp(newXp);
           task.xpAwarded = Math.max(0, newXp - old);
         } else {
-          state.xp += Number(task.xpAwarded) || 0;
+          setCurrentXp(getCurrentXp() + (Number(task.xpAwarded) || 0));
         }
       } else if (!checked && wasCompleted) {
         // Do not remove XP to keep the system consistent.
       }
 
       saveState();
-      updateTopXpMini();
       renderProgress();
       renderTasks();
     });
@@ -436,13 +559,13 @@ function renderTasks() {
 }
 
 function showScreen(screenId) {
-  const subScreens = ["screenCustomize", "screenTodos"];
+  const subScreens = ["screenCustomize", "screenTodos", "screenChangeClass"];
 
   // Hide main game UI when a sub-screen is open.
   document.getElementById("avatarBlock")?.classList.add("hidden");
   document.querySelector(".xpStage")?.classList.add("hidden");
   document.getElementById("btnGoTodos")?.classList.add("hidden");
-  document.getElementById("btnGoCustomize")?.classList.add("hidden");
+  document.querySelector(".buttonRow")?.classList.add("hidden");
 
   subScreens.forEach((id) => {
     const el = document.getElementById(id);
@@ -454,29 +577,31 @@ function showScreen(screenId) {
 
 function wireUpUI() {
   const btnGoCustomize = document.getElementById("btnGoCustomize");
+  const btnGoChangeClass = document.getElementById("btnGoChangeClass");
   const btnGoTodos = document.getElementById("btnGoTodos");
   const btnBackFromCustomize = document.getElementById("btnBackFromCustomize");
+  const btnBackFromChangeClass = document.getElementById("btnBackFromChangeClass");
   const btnBackFromTodos = document.getElementById("btnBackFromTodos");
 
   btnGoCustomize?.addEventListener("click", () => showScreen("screenCustomize"));
+  btnGoChangeClass?.addEventListener("click", () => showScreen("screenChangeClass"));
   btnGoTodos?.addEventListener("click", () => showScreen("screenTodos"));
-  btnBackFromCustomize?.addEventListener("click", () => {
-    // Return to main view by hiding both sub screens.
+  
+  const returnToMain = () => {
     document.getElementById("screenCustomize")?.classList.add("hidden");
+    document.getElementById("screenChangeClass")?.classList.add("hidden");
     document.getElementById("screenTodos")?.classList.add("hidden");
     document.getElementById("avatarBlock")?.classList.remove("hidden");
     document.querySelector(".xpStage")?.classList.remove("hidden");
     document.getElementById("btnGoTodos")?.classList.remove("hidden");
-    document.getElementById("btnGoCustomize")?.classList.remove("hidden");
-  });
-  btnBackFromTodos?.addEventListener("click", () => {
-    document.getElementById("screenCustomize")?.classList.add("hidden");
-    document.getElementById("screenTodos")?.classList.add("hidden");
-    document.getElementById("avatarBlock")?.classList.remove("hidden");
-    document.querySelector(".xpStage")?.classList.remove("hidden");
-    document.getElementById("btnGoTodos")?.classList.remove("hidden");
-    document.getElementById("btnGoCustomize")?.classList.remove("hidden");
-  });
+    document.querySelector(".buttonRow")?.classList.remove("hidden");
+  };
+  
+  btnBackFromCustomize?.addEventListener("click", returnToMain);
+  btnBackFromChangeClass?.addEventListener("click", returnToMain);
+  btnBackFromTodos?.addEventListener("click", returnToMain);
+
+  renderClassGrid();
 
   const taskForm = document.getElementById("taskForm");
   const taskInput = document.getElementById("taskInput");
@@ -531,7 +656,7 @@ function wireUpUI() {
   });
 
   // Keep current design preview consistent even if user switches manually.
-  const { level } = getLevelProgress(state.xp);
+  const { level } = getLevelProgress(getCurrentXp());
   const unlockedDesignIds = getUnlockedDesignIdsByLevel(level);
   if (!unlockedDesignIds.includes(state.currentDesignId)) {
     state.currentDesignId = getBestUnlockedDesignId(level);
@@ -539,12 +664,12 @@ function wireUpUI() {
 }
 
 function applyStateToUI() {
-  updateTopXpMini();
   renderProgress();
-  setDesignOnAvatar(state.currentDesignId);
+  applyClassToAvatar();
   renderTasks();
+  renderClassGrid();
 
-  const { level } = getLevelProgress(state.xp);
+  const { level } = getLevelProgress(getCurrentXp());
   const unlockedDesignIds = getUnlockedDesignIdsByLevel(level);
   if (!unlockedDesignIds.includes(state.currentDesignId)) {
     state.currentDesignId = getBestUnlockedDesignId(level);
@@ -553,7 +678,10 @@ function applyStateToUI() {
   // Initialize hint message on load (hide unlock message on page load)
   const lockHint = document.getElementById("designLockHint");
   if (lockHint) {
-    if (state.currentDesignId === 0) {
+    if (!isKnightClass()) {
+      lockHint.textContent = "Professor class has no upgrades.";
+      lockHint.classList.remove("hidden", "flash");
+    } else if (state.currentDesignId === 0) {
       lockHint.textContent = "Complete tasks to unlock new designs.";
       lockHint.classList.remove("hidden", "flash");
     } else {

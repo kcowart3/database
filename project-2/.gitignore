@@ -1,0 +1,14 @@
+# macOS metadata files
+._*
+.DS_Store
+
+# Thumbnails
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
