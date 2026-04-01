@@ -174,7 +174,7 @@ body{
 }
 
 .tinyLabel{
-  font-size: 34px;
+  font-size: 28px;
   color: var(--ink);
   letter-spacing: .8px;
   font-weight: 900;
@@ -186,7 +186,7 @@ body{
 }
 
 .levelValue{
-  font-size: 34px;
+  font-size: 28px;
   font-weight: 900;
   line-height: 1;
   text-shadow: none;
@@ -211,7 +211,7 @@ body{
 }
 
 .nextRequirement{
-  font-size: 12px;
+  font-size: 10px;
   color: var(--ink);
   text-shadow: none;
 }
@@ -241,7 +241,7 @@ body{
   justify-content:space-between;
   padding: 10px 16px 0 16px;
   color: var(--ink);
-  font-size: 12px;
+  font-size: 10px;
   position:relative;
   z-index:1;
 }
@@ -323,14 +323,14 @@ body{
 }
 
 .designLabel{
-  font-size: 12px;
+  font-size: 10px;
   color: rgba(255,107,157,.95);
   font-weight: 700;
 }
 
 .designHint{
   margin-top: 8px;
-  font-size: 12px;
+  font-size: 10px;
   color: var(--ink);
   line-height:1.3;
   transition: opacity 200ms ease;
@@ -378,7 +378,7 @@ body{
   width:auto;
   padding: 8px 12px;
   border-radius: 0;
-  font-size: 12px;
+  font-size: 10px;
 }
 
 .btnTodo{
@@ -396,7 +396,7 @@ body{
   padding: 12px 12px;
   font-weight: 800;
   letter-spacing:.2px;
-  font-size: 12px;
+  font-size: 10px;
   cursor:pointer;
   transition: transform 100ms ease, background 120ms ease, border-color 120ms ease;
   text-shadow: none;
@@ -446,7 +446,7 @@ body{
 }
 
 .subTitle{
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 900;
   letter-spacing: .7px;
   color: var(--ink);
@@ -473,10 +473,10 @@ body{
   gap: 6px;
 }
 
-.fieldSmall .fieldLabel{ font-size: 12px; }
+.fieldSmall .fieldLabel{ font-size: 10px; }
 
 .fieldLabel{
-  font-size: 12px;
+  font-size: 10px;
   color: var(--ink);
 }
 
@@ -488,6 +488,7 @@ body{
   background: rgba(61,40,99,.45);
   color: var(--ink);
   outline:none;
+  font-size: 10px;
 }
 .input::placeholder{ color: rgba(0,229,255,.65); }
 .input:focus,.select:focus{
@@ -535,14 +536,14 @@ body{
 .taskText{
   flex:1;
   min-width:0;
-  font-size: 13px;
+  font-size: 11px;
   line-height: 1.2;
   word-break: break-word;
   color: var(--ink);
 }
 
 .taskMeta{
-  font-size: 11px;
+  font-size: 9px;
   color: var(--ink);
   white-space:nowrap;
 }
@@ -553,7 +554,7 @@ body{
   border-radius: 0;
   border: 2px dashed rgba(255,107,157,.52);
   color: var(--ink);
-  font-size: 12px;
+  font-size: 10px;
   text-align:center;
 }
 
@@ -566,7 +567,7 @@ body{
 }
 
 .settingsNote{
-  font-size: 12px;
+  font-size: 10px;
   color: var(--ink);
   line-height:1.3;
 }
@@ -802,13 +803,13 @@ body{
 
 .designName{
   margin-top: 8px;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 900;
   letter-spacing: .4px;
 }
 .designReq{
   margin-top: 3px;
-  font-size: 11px;
+  font-size: 9px;
   color: var(--ink);
 }
 
@@ -817,8 +818,8 @@ body{
   .screen{ padding: 26px; }
   .appContent{ width: 520px; }
   .avatarFrame{ width: 170px; }
-  .tinyLabel{ font-size: 40px; }
-  .levelValue{ font-size: 40px; }
+  .tinyLabel{ font-size: 34px; }
+  .levelValue{ font-size: 34px; }
 
   /* Desktop splash should not use the "phone frame" border */
   .splashFrame{
