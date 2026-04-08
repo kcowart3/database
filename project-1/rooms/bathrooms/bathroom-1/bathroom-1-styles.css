@@ -1,0 +1,132 @@
+body {
+    background-color: black;
+    background-image: url(../../../assets/images/bathroom-1.png);
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
+    background-repeat: no-repeat;
+    font-family: courier;
+    color: white;
+}
+
+.main-text {
+    font-size: 14px;
+    text-align: left;
+    margin: 21% 20% 25px 50%;
+}
+
+b, .word {
+    color: rgb(0, 71, 187);
+}
+
+.reveal-toggle {
+    display: none;
+}
+
+.text-wrapper {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    margin-right: 67%;
+}
+
+.open-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.open-button:hover {
+    background-color: black;
+    color: white;
+}
+
+.typing-text {
+    color: white;
+    font-size: 14px;
+    text-align: left;
+    margin: 0;
+    display: none;
+    background-color: black;
+    padding: 15px;
+}
+
+.reveal-toggle:checked ~ .text-wrapper .typing-text {
+    display: block;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.reveal-toggle:checked ~ .text-wrapper .open-button {
+    background-color: black;
+    color: white;
+    border: 2px solid white;
+}
+
+@media (max-width: 768px) {
+    body {
+        background-size: 100vw auto;
+    }
+    .main-text {
+        font-size: 11px;
+        margin: 15% 25% 20px 25%;
+    }
+    .text-wrapper {
+        top: 15px;
+        left: 15px;
+        margin-right: 30%;
+    }
+    .typing-text {
+        font-size: 12px;
+        padding: 12px;
+    }
+    .open-button {
+        width: 10px;
+        height: 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        background-size: 100vw auto;
+    }
+    .main-text {
+        font-size: 10px;
+        margin: 10% 10% 15px 10%;
+    }
+    .text-wrapper {
+        top: 10px;
+        left: 10px;
+        margin-right: 10%;
+        width: 85%;
+    }
+    .typing-text {
+        font-size: 11px;
+        padding: 10px;
+    }
+    .open-button {
+        width: 10px;
+        height: 10px;
+        font-size: 11px;
+    }
+}

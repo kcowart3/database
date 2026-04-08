@@ -1,0 +1,124 @@
+* {
+    color: white;
+    font-family: Courier;
+}
+
+body {
+    background-color: black;
+    background-image: url(../../../assets/images/bedroom-1.png);
+    background-size: 100vw auto;
+    background-attachment: fixed;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+b, .word { /* make the word "house" blue */
+    color: rgb(0, 71, 187);
+}
+
+.main-text {
+    font-size: 14px;
+    text-align: left;
+    margin: 2% 60px 10px 55%;
+}
+
+.reveal-toggle {
+    display: none;
+}
+
+.text-wrapper {
+    position: relative;
+    margin: 15px 60px 25px 55%;
+}
+
+.open-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    background-color: white;
+    color: black;
+    font-family: courier;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.open-button:hover {
+    background-color: black;
+    color: white;
+}
+
+.typing-text {
+    color: white;
+    font-size: 14px;
+    text-align: left;
+    margin: 0;
+    display: none;
+    background-color: black;
+    padding: 15px;
+}
+
+.reveal-toggle:checked ~ .text-wrapper .typing-text {
+    display: block;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.reveal-toggle:checked ~ .text-wrapper .open-button {
+    background-color: black;
+    color: white;
+    border: 2px solid white;
+}
+
+@media (max-width: 768px) {
+    .main-text {
+        font-size: 12px;
+        margin: 5% 25% 20px 20px;
+    }
+    .text-wrapper {
+        margin: 15px 20px 25px 25%;
+    }
+    .typing-text {
+        font-size: 12px;
+        padding: 12px;
+    }
+    .open-button {
+        width: 10px;
+        height: 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-text {
+        font-size: 11px;
+        margin: 5% 10% 15px 10px;
+    }
+    .text-wrapper {
+        margin: 15px 10px 25px 10%;
+        width: 85%;
+    }
+    .typing-text {
+        font-size: 11px;
+        padding: 10px;
+    }
+    .open-button {
+        width: 10px;
+        height: 10px;
+        font-size: 11px;
+    }
+}

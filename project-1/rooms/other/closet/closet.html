@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="stylesheet" href="closet-styles.css">
+        <link rel="stylesheet" href="../../../assets/doors.css">
+        <title>closet</title>
+    </head>
+    
+    <audio id="doorslam" autoplay style="display: none;">
+        <source src="../../../assets/doorslam.m4a" type="audio/mp4">
+    </audio>
+
+    <audio id="breath" autoplay loop style="display: none;">
+        <source src="../../../assets/breath.mp3" type="audio/mp3">
+    </audio>
+
+    <body>
+
+        <input type="checkbox" id="revealToggle" class="reveal-toggle">
+        <div class="text-wrapper">
+            <label for="revealToggle" class="open-button">X</label>
+            <p class="typing-text">
+                <del>It's too dark to see anything. I feel like someone is breathing down my neck. The less time I spend here, the better.</del> - X
+            </p>
+        </div>
+
+        <div class="door-container door-left">
+            <div class="door-frame"></div>
+            <div class="door-shape">
+                <div class="door-handle"></div>
+            </div>
+            <div class="door-overlay"><a href="../../../navigation.html">RETURN</a></div>
+        </div>
+        <div class="door-container door-right">
+            <div class="door-frame"></div>
+            <div class="door-shape">
+                <div class="door-handle"></div>
+            </div>
+            <div class="door-overlay"><a href="../../bathrooms/bathroom-1/bathroom-1.html">Bathroom 1</a></div>
+        </div>
+    </body>
+</html>

@@ -7,78 +7,163 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;700&family=Montserrat:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./css/styles.css" />
 </head>
 <body>
-  <div class="film-grain" aria-hidden="true"></div>
-  <div class="space-backdrop sol-bg" aria-hidden="true"></div>
-
-  <header class="top-bar">
-    <div class="title-block">
-      <h1>LUX MORI</h1>
-      <p class="eyebrow">THE UNIVERSE OF DYING STARS</p>
+  <div class="splash-screen" id="splashScreen">
+    <div class="splash-logo-wrap">
+      <img class="splash-logo" src="./assets/LM Logo.svg" alt="LM Logo">
     </div>
-    <button id="go-milkyway" class="glyph-btn" title="Zoom out to Milky Way" aria-label="Zoom out to Milky Way">✦</button>
-  </header>
+    <p class="splash-text">LUX MORI</p>
+    <p class="splash-subtitle">THE UNIVERSE OF DYING STARS</p>
+    <div class="splash-cta" id="splashCta">
+      <button class="splash-btn" id="enterBtn">Enter System</button>
+    </div>
+  </div>
 
-  <main id="universe" class="universe">
-    <section class="system-card ominous">
-      <p class="system-meta">Galaxy: Milky Way</p>
-      <h2>Solar System: Sol</h2>
-      <p class="system-summary">
-        Uncountable generations after the Terra Exodus, survivors chart the dead light of Sol and guard what remains.
-      </p>
-    </section>
+  <div id="mainContent" style="display: none;">
+    <div class="film-grain" aria-hidden="true"></div>
+    <div class="space-backdrop sol-bg" aria-hidden="true"></div>
 
-    <section class="system-stage" aria-label="Animated Sol system">
-      <img class="sol-system-svg" src="./IMGs/Sol System.svg" alt="Sol system map" />
-      <div class="map-center">
-        <button class="planet star-anchor" data-planet="Sol" aria-label="Sol star" title="Sol">
-          <img src="./IMGs/Planet.svg" alt="" />
-        </button>
+    <header class="top-bar">
+      <div class="title-block">
+        <h1 id="mainTitle">LUX MORI</h1>
+        <p class="eyebrow">THE UNIVERSE OF DYING STARS</p>
       </div>
+      <button id="go-milkyway" class="glyph-btn" title="Zoom out to Milky Way" aria-label="Zoom out to Milky Way">✦</button>
+    </header>
 
-      <div class="svg-orbit orbit-mercury">
-        <button class="planet mercury" data-planet="Mercury"><img src="./IMGs/Planet.svg" alt="" /></button>
-      </div>
-      <div class="svg-orbit orbit-venus">
-        <button class="planet venus" data-planet="Venus"><img src="./IMGs/Planet.svg" alt="" /></button>
-      </div>
-      <div class="svg-orbit orbit-earth">
-        <button class="planet earth" data-planet="Earth"><img src="./IMGs/Planet.svg" alt="" /></button>
-      </div>
-      <div class="svg-orbit orbit-mars">
-        <button class="planet mars" data-planet="Mars"><img src="./IMGs/Planet.svg" alt="" /></button>
-      </div>
-      <div class="svg-orbit orbit-jupiter">
-        <button class="planet jupiter" data-planet="Jupiter"><img src="./IMGs/Planet.svg" alt="" /></button>
-      </div>
-      <div class="svg-orbit orbit-saturn">
-        <button class="planet saturn" data-planet="Saturn"><img src="./IMGs/Planet.svg" alt="" /></button>
-      </div>
-      <div class="svg-orbit orbit-uranus">
-        <button class="planet uranus" data-planet="Uranus"><img src="./IMGs/Planet.svg" alt="" /></button>
-      </div>
-      <div class="svg-orbit orbit-neptune">
-        <button class="planet neptune" data-planet="Neptune"><img src="./IMGs/Planet.svg" alt="" /></button>
-      </div>
-    </section>
+    <main id="universe" class="universe">
+      <section class="system-card ominous">
+        <p class="system-meta">Galaxy: Milky Way</p>
+        <h2>Solar System: Sol</h2>
+        <p class="system-code">Code: 0001</p>
+        <p class="system-summary">
+          Uncountable generations after the Terra Exodus, survivors chart the dead light of Sol and guard what remains.
+        </p>
+      </section>
 
-    <button id="view-systems" class="side-btn side-btn-left" title="View community systems" aria-label="View community systems">◎</button>
-    <button id="create-system" class="side-btn side-btn-right" title="Create solar system" aria-label="Create solar system">+</button>
-    <aside id="hud-message" class="hud-message" role="status" aria-live="polite"></aside>
-  </main>
+      <section class="system-stage" aria-label="Animated Sol system">
+        <img class="sol-system-svg" src="./assets/Sol System.svg" alt="Sol system map" />
+        <div class="map-center">
+          <button class="planet star-anchor" data-planet="Sol" aria-label="Sol star" title="Sol">
+            <img src="./assets/Sun.svg" alt="" />
+          </button>
+        </div>
 
-  <dialog id="planet-modal" class="planet-modal">
-    <form method="dialog" class="modal-content">
-      <button class="close" aria-label="Close details">x</button>
-      <h3 id="planet-name">Planet</h3>
-      <p id="planet-makeup" class="makeup"></p>
-      <p id="planet-description"></p>
-      <p id="planet-moons" class="moon-count"></p>
-    </form>
-  </dialog>
+        <div class="svg-orbit orbit-mercury">
+          <button class="planet mercury" data-planet="Mercury"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+        <div class="svg-orbit orbit-venus">
+          <button class="planet venus" data-planet="Venus"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+        <div class="svg-orbit orbit-earth">
+          <button class="planet earth" data-planet="Earth"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+        <div class="svg-orbit orbit-mars">
+          <button class="planet mars" data-planet="Mars"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+        <div class="svg-orbit orbit-jupiter">
+          <button class="planet jupiter" data-planet="Jupiter"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+        <div class="svg-orbit orbit-saturn">
+          <button class="planet saturn" data-planet="Saturn"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+        <div class="svg-orbit orbit-uranus">
+          <button class="planet uranus" data-planet="Uranus"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+        <div class="svg-orbit orbit-neptune">
+          <button class="planet neptune" data-planet="Neptune"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+      </section>
 
-  <script src="./script.js"></script>
+      <button id="search-systems" class="side-btn side-btn-left" title="Search solar systems" aria-label="Search solar systems">⌕</button>
+      <button id="create-system" class="side-btn side-btn-right" title="Create solar system" aria-label="Create solar system">+</button>
+      <aside id="hud-message" class="hud-message" role="status" aria-live="polite"></aside>
+    </main>
+
+    <dialog id="search-modal" class="planet-modal">
+      <form method="dialog" class="modal-content">
+        <button class="close" aria-label="Close search">x</button>
+        <h3>Search Solar Systems</h3>
+        <p class="search-instruction">Enter a 4-digit system code to navigate.</p>
+        <input type="text" id="system-code-input" class="system-code-input" placeholder="0001" maxlength="4" pattern="[0-9]{4}" />
+        <button type="button" id="search-btn" class="search-btn">Navigate</button>
+      </form>
+    </dialog>
+
+    <dialog id="planet-modal" class="planet-modal">
+      <form method="dialog" class="modal-content">
+        <button class="close" aria-label="Close details">x</button>
+        <h3 id="planet-name">Planet</h3>
+        <p id="planet-makeup" class="makeup"></p>
+        <p id="planet-description"></p>
+        <p id="planet-moons" class="moon-count"></p>
+      </form>
+    </dialog>
+  </div>
+
+  <script src="./js/script.js"></script>
+  <script>
+  (function () {
+    var splash = document.getElementById('splashScreen');
+    var cta = document.getElementById('splashCta');
+    var enterBtn = document.getElementById('enterBtn');
+    var mainContent = document.getElementById('mainContent');
+    var mainTitle = document.getElementById('mainTitle');
+    
+    if (!splash || !cta || !enterBtn || !mainContent) {
+      return;
+    }
+
+    function showCta() {
+      cta.classList.add('is-visible');
+    }
+
+    function startSequence() {
+      splash.classList.add('is-logo-revealed');
+      window.setTimeout(function () {
+        splash.classList.add('is-text-visible');
+      }, 1900);
+      window.setTimeout(showCta, 2900);
+    }
+
+    function hideSplash() {
+      splash.classList.add('is-exiting');
+      window.setTimeout(function () {
+        splash.classList.add('splash-dismissed');
+        mainContent.style.display = 'block';
+      }, 800);
+    }
+
+    function showSplash() {
+      mainContent.style.display = 'none';
+      splash.classList.remove('splash-dismissed');
+      splash.classList.remove('is-exiting');
+      splash.classList.remove('is-logo-revealed');
+      splash.classList.remove('is-text-visible');
+      cta.classList.remove('is-visible');
+      
+      window.setTimeout(startSequence, 80);
+    }
+
+    enterBtn.addEventListener('click', hideSplash);
+    
+    if (mainTitle) {
+      mainTitle.addEventListener('click', function() {
+        showSplash();
+      });
+      mainTitle.style.cursor = 'pointer';
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      splash.classList.add('is-logo-revealed');
+      splash.classList.add('is-text-visible');
+      showCta();
+    } else {
+      window.setTimeout(startSequence, 80);
+    }
+  })();
+  </script>
 </body>
 </html>

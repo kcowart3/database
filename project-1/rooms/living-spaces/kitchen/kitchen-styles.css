@@ -1,0 +1,129 @@
+body {
+    background-color: black;
+    font-family: courier;
+    background-image: url(../../../assets/images/kitchen.png);
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
+    background-repeat: no-repeat;
+    color: white;
+}
+
+.main-text {
+    font-size: 14px;
+    text-align: left;
+    margin: 5% 70% 25px 25px;
+}
+
+b, .word {
+    color: rgb(0, 71, 187);
+}
+
+.reveal-toggle {
+    display: none;
+}
+
+.text-wrapper {
+    position: absolute;
+    top: 45%;
+    left: 25px;
+    margin-left: 25px;
+    margin-right: 70%;
+}
+
+.open-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.open-button:hover {
+    background-color: black;
+    color: white;
+}
+
+.typing-text {
+    color: white;
+    font-size: 14px;
+    text-align: left;
+    margin: 0;
+    display: none;
+    background-color: black;
+    padding: 15px;
+}
+
+.reveal-toggle:checked ~ .text-wrapper .typing-text {
+    display: block;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.reveal-toggle:checked ~ .text-wrapper .open-button {
+    background-color: black;
+    color: white;
+    border: 2px solid white;
+}
+
+@media (max-width: 768px) {
+    .main-text {
+        font-size: 12px;
+        margin: 5% 30% 20px 15px;
+    }
+    .text-wrapper {
+        top: 35%;
+        left: 15px;
+        margin-left: 15px;
+        margin-right: 35%;
+    }
+    .typing-text {
+        font-size: 12px;
+        padding: 12px;
+    }
+    .open-button {
+        width: 10px;
+        height: 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-text {
+        font-size: 11px;
+        margin: 5% 5% 15px 10px;
+    }
+    .text-wrapper {
+        position: relative;
+        top: auto;
+        left: 10px;
+        margin: 15px 10px;
+        width: calc(100% - 20px);
+    }
+    .typing-text {
+        font-size: 11px;
+        padding: 10px;
+    }
+    .open-button {
+        width: 10px;
+        height: 10px;
+        font-size: 11px;
+    }
+}
