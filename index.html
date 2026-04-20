@@ -1,29 +1,52 @@
 <!DOCTYPE html>
-<html> 
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Kian's Portfolio Website</title>
-    <link rel="icon" type="image/png" href="assets/images/KCpixportrait.jpg"/>
+    <title>Kian Cowart Portfolio</title>
+    <link rel="icon" type="image/png" href="assets/images/KCpixportrait.jpg" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1 id="top">Kian's Class Website</h1>
-    <h2>Class projects</h2>
-    <ul>
-      <li>
-        <a href="project-1/main.html">Project 1 : House of Multitudes</a>
-      </li>
-      <li>
-        <a href="project-2/index.html">Project 2 : FANTACLEAN</a>
-      </li>
-      <li>
-        <a href="project-3/index.html">Project 3 : Lux Mori</a>
-      </li>
-    </ul>
-    <br>
-    <br>
-    <h2>Exercises</h2>
-    <ul>
+    <main class="hero">
+      <button id="logoTrigger" class="logo-button" aria-label="Activate KC logo">
+        <svg class="logo-svg" viewBox="0 0 710 710" aria-hidden="true" role="img">
+          <defs>
+            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ff1f71">
+                <animate attributeName="stop-color" values="#ff1f71;#ff4d4d;#c035ff;#ff1f71" dur="3.5s" repeatCount="indefinite" />
+              </stop>
+              <stop offset="50%" stop-color="#ff4d4d">
+                <animate attributeName="offset" values="0.2;0.8;0.2" dur="2.8s" repeatCount="indefinite" />
+              </stop>
+              <stop offset="100%" stop-color="#8d3bff">
+                <animate attributeName="stop-color" values="#8d3bff;#ff1f71;#8d3bff" dur="4s" repeatCount="indefinite" />
+              </stop>
+            </linearGradient>
+          </defs>
+
+          <path
+            class="logo-fill"
+            d="M452.42,239.43l-23.78,43.58,50.17,26.59-26.23,45.4-97.28-50.16,64.45-117.74h129.79s-30.51,52.83-30.51,52.83l-66.61-.51ZM440.43,376.55l-119.16-60.17,69.77-129.28h-61.79l-50.26,98.33-56.58-98.33h-61.36s194.21,336.37,194.21,336.37l30.61-52.99-53.18-92.22,79.89,46.02,27.86-47.74Z"
+          />
+          <path
+            class="logo-outline"
+            d="M452.42,239.43l-23.78,43.58,50.17,26.59-26.23,45.4-97.28-50.16,64.45-117.74h129.79s-30.51,52.83-30.51,52.83l-66.61-.51ZM440.43,376.55l-119.16-60.17,69.77-129.28h-61.79l-50.26,98.33-56.58-98.33h-61.36s194.21,336.37,194.21,336.37l30.61-52.99-53.18-92.22,79.89,46.02,27.86-47.74Z"
+          />
+        </svg>
+      </button>
+    </main>
+    <main id="mainSite" class="main-site" aria-hidden="true">
+      <h1 class="main-title">Kian Cowart</h1>
+      <p class="main-lead">Digital designer and creative developer. Minimal form, high contrast, expressive interaction.</p>
+      <h2 class="section-title">Projects</h2>
+      <ul class="main-links">
+        <li><a href="project-1/main.html">Project 1 - House of Multitudes</a></li>
+        <li><a href="project-2/index.html">Project 2 - Fantaclean</a></li>
+        <li><a href="project-3/index.html">Project 3 - Lux Mori</a></li>
+      </ul>
+      <h2 class="section-title">Exercises</h2>
+      <ul class="main-links main-links-exercises">
         <li>Pixel Portrait (see the icon on the tab)</li>
         <li><a href="https://kcowart3.github.io/Abstract-composition-codepad/">Abstract composition</a></li>
         <li><a href="https://kcowart3.github.io/flexbox/">Flexbox challenge</a></li>
@@ -33,33 +56,33 @@
         <li><a href="https://kcowart3.github.io/still-life/">Still Life</a></li>
         <li><a href="https://kcowart3.github.io/Click-and-hover/">Click and Hover</a></li>
         <li><a href="https://kcowart3.github.io/Clock/">Clock</a></li>
+        <li><a href="https://kcowart3.github.io/billboard/">Billboard</a></li>
       </ul>
-    <br>
-    <div>
-      <h4>About this site</h4>
-      <p>This page will act as the main repository for you to see my (Kian!) work for the Local Software class. Enjoy!</p>
-      <div>
-        <a href="http://software-for-people.net/">Visit my class homepage!</a>
-      </div>
-    </div>
-    <p>Technology is <b>truly</b> amazing!</p>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <footer>
-      <div>
-        <a href="#top">Back to top</a>
-      </div>
-    </footer>
+    </main>
+
+    <script>
+      const logoTrigger = document.getElementById("logoTrigger");
+      const hero = document.querySelector(".hero");
+      const mainSite = document.getElementById("mainSite");
+      let didActivate = false;
+
+      logoTrigger.addEventListener("click", () => {
+        if (didActivate) {
+          return;
+        }
+
+        didActivate = true;
+        logoTrigger.classList.add("active");
+
+        setTimeout(() => {
+          hero.classList.add("fade-out");
+        }, 380);
+
+        setTimeout(() => {
+          mainSite.classList.add("active");
+          mainSite.setAttribute("aria-hidden", "false");
+        }, 950);
+      });
+    </script>
   </body>
 </html>
-
-    
-    
-    
-
-
-      

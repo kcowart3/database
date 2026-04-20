@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Enzo Mari redux</title>
+    <style>
+        img {
+            max-width: 100%;
+            cursor: pointer;
+        }
+
+        img:hover {
+            filter: hue-rotate(90deg);
+        }
+
+        div {
+            display:inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="credit">This website is based on the design of the <a href="https://enzomari.com/">Enzo Mari archive</a> by <a href="https://jon-l.com/">Jon Lucas</a>.</div>
+    
+    <script>
+        // define your "batch of images" in an array
+       var images = [
+                "<img src='images/horse_1.jpg'>",
+                "<img src='images/horse_2.jpg'>",
+                "<img src='images/horse_3.jpg'>",
+                "<img src='images/horse_4.jpg'>",
+                "<img src='images/horse_5.jpg'>",
+                "<img src='images/horse_6.jpg'>",
+                "<img src='images/horse_7.jpg'>",
+                "<img src='images/horse_8.jpg'>",
+            ]
+
+        // this function randomly picks an image from the batch
+        function random_image() {
+            return Math.floor(Math.random() * images.length);
+        }
+
+        // this function adds the randomly-selected image to the page
+        function add_image() {
+
+            // first you make a new div for the image.
+            var new_image = document.createElement('div');
+
+            // then you set the div's inner-HTML, ie its content, to the chosen img tag
+            new_image.innerHTML = images[random_image()];
+
+            // these two lines pick a random width for the image.
+            // 300 is the MAX width, and 100 is the MIN width.
+            var random_width = Math.floor(Math.random() * (300 - 100 + 1) + 100);
+            var random_width_pixels = random_width + "px";
+
+            // assign that random width to the new image
+            new_image.style.width = random_width_pixels;
+
+            // add the new image to the document's body (so it's visible!)
+            document.body.prepend(new_image);
+
+            // last step! set up the click. 
+            // You want your image to 'listen' for clicks. When its clicked, it adds a new image.
+            new_image.addEventListener('click', add_image);
+        }
+
+        // so that the first image appears when the page load, run the function once.
+        add_image();
+    </script>
+</body>
+
+</html>
