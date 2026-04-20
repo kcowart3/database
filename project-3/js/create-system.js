@@ -1,10 +1,19 @@
 const goBackButton = document.getElementById("go-back");
 const cancelButton = document.getElementById("cancel-btn");
 const createSystemForm = document.getElementById("create-system-form");
+const mainTitle = document.getElementById("mainTitle");
 
-goBackButton.addEventListener("click", () => {
-  window.location.href = "./milkyway.html";
-});
+if (mainTitle) {
+  mainTitle.addEventListener("click", () => {
+    window.location.href = "./index.html";
+  });
+}
+
+if (goBackButton) {
+  goBackButton.addEventListener("click", () => {
+    window.location.href = "./milkyway.html";
+  });
+}
 
 cancelButton.addEventListener("click", () => {
   if (confirm("Discard system creation and return to galaxy view?")) {
@@ -57,9 +66,9 @@ createSystemForm.addEventListener("submit", (e) => {
   systems.push(newSystem);
   localStorage.setItem("luxMoriSystems", JSON.stringify(systems));
 
-  alert(`System "${systemName}" (${systemCode}) forged!\n\nRings: ${numRings}\nStar: ${starType}\nPlanets: ${numPlanets}\n\nYour system now appears on the galaxy map.`);
+  alert(`System "${systemName}" (${systemCode}) forged!\n\nRings: ${numRings}\nStar: ${starType}\nPlanets: ${numPlanets}\n\nSystem view created.`);
   
-  window.location.href = "./milkyway.html";
+  window.location.href = `./index.html?code=${encodeURIComponent(systemCode)}&nosplash=1`;
 });
 
 const systemCodeInput = document.getElementById("system-code");

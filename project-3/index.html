@@ -30,7 +30,7 @@
         <h1 id="mainTitle">LUX MORI</h1>
         <p class="eyebrow">THE UNIVERSE OF DYING STARS</p>
       </div>
-      <button id="go-milkyway" class="glyph-btn" title="Zoom out to Milky Way" aria-label="Zoom out to Milky Way">✦</button>
+      <button id="go-milkyway" class="glyph-btn" title="Return to galaxy view" aria-label="Return to galaxy view">RETURN</button>
     </header>
 
     <main id="universe" class="universe">
@@ -78,7 +78,9 @@
       </section>
 
       <button id="search-systems" class="side-btn side-btn-left" title="Search solar systems" aria-label="Search solar systems">⌕</button>
+      <button id="prev-system" class="side-btn side-btn-left side-btn-left-lower" title="Previous system code" aria-label="Previous system code">&#8592;</button>
       <button id="create-system" class="side-btn side-btn-right" title="Create solar system" aria-label="Create solar system">+</button>
+      <button id="next-system" class="side-btn side-btn-right side-btn-right-lower" title="Next system code" aria-label="Next system code">&#8594;</button>
       <aside id="hud-message" class="hud-message" role="status" aria-live="polite"></aside>
     </main>
 
@@ -131,9 +133,8 @@
     function hideSplash() {
       splash.classList.add('is-exiting');
       window.setTimeout(function () {
-        splash.classList.add('splash-dismissed');
-        mainContent.style.display = 'block';
-      }, 800);
+        window.location.href = './milkyway.html';
+      }, 500);
     }
 
     function showSplash() {
@@ -154,6 +155,15 @@
         showSplash();
       });
       mainTitle.style.cursor = 'pointer';
+    }
+
+    var searchParams = new URLSearchParams(window.location.search);
+    var noSplash = searchParams.get('nosplash') === '1';
+
+    if (noSplash) {
+      splash.classList.add('splash-dismissed');
+      mainContent.style.display = 'block';
+      return;
     }
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {

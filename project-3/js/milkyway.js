@@ -1,6 +1,7 @@
 const searchSystemsButton = document.getElementById("search-systems");
 const createSystemButton = document.getElementById("create-system");
 const solStarButton = document.getElementById("sol-star");
+const mainTitle = document.getElementById("mainTitle");
 const hudMessage = document.getElementById("hud-message");
 const milkywayStage = document.querySelector(".milkyway-stage");
 
@@ -13,6 +14,10 @@ function showHud(text) {
   messageTimeout = window.setTimeout(() => {
     hudMessage.classList.remove("show");
   }, 2800);
+}
+
+function goToSystem(code) {
+  window.location.href = `./index.html?code=${encodeURIComponent(code)}&nosplash=1`;
 }
 
 // Load and render custom systems
@@ -39,7 +44,7 @@ function renderCustomSystems() {
     
     // Create star button
     const starButton = document.createElement("button");
-    starButton.className = "custom-star";
+    starButton.className = "custom-star galaxy-star";
     starButton.style.position = "absolute";
     starButton.style.left = "100%";
     starButton.style.top = "50%";
@@ -66,7 +71,7 @@ function renderCustomSystems() {
     });
     
     starButton.addEventListener("click", () => {
-      showHud(`System ${system.code} (${system.name}) - Full navigation coming soon!`);
+      goToSystem(system.code);
     });
     
     // Rotate orbit to position
@@ -81,28 +86,34 @@ function renderCustomSystems() {
 // Render systems on page load
 renderCustomSystems();
 
-const returnButton = document.getElementById("return-sol");
-
-if (returnButton) {
-  returnButton.addEventListener("click", () => {
+if (mainTitle) {
+  mainTitle.addEventListener("click", () => {
     window.location.href = "./index.html";
   });
 }
 
 solStarButton.addEventListener("click", () => {
-  window.location.href = "./index.html";
+  goToSystem("0001");
+});
+
+solStarButton.addEventListener("mouseenter", () => {
+  showHud("System 0001: Sol");
+});
+
+solStarButton.addEventListener("mouseleave", () => {
+  hudMessage.classList.remove("show");
 });
 
 searchSystemsButton.addEventListener("click", () => {
   const code = prompt("Enter a 4-digit system code to search (Sol is 0001):");
   if (code) {
     if (code === "0001") {
-      window.location.href = "./index.html";
+      goToSystem("0001");
     } else if (/^\d{4}$/.test(code)) {
       const systems = JSON.parse(localStorage.getItem("luxMoriSystems") || "[]");
       const found = systems.find(sys => sys.code === code);
       if (found) {
-        showHud(`Found: ${found.name} (${code})`);
+        goToSystem(found.code);
       } else {
         showHud(`System ${code} not found. Create it to claim this code.`);
       }

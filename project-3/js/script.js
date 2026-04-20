@@ -58,7 +58,15 @@ const planetData = {
 const milkywayButton = document.getElementById("go-milkyway");
 const searchSystemsButton = document.getElementById("search-systems");
 const createSystemButton = document.getElementById("create-system");
+const prevSystemButton = document.getElementById("prev-system");
+const nextSystemButton = document.getElementById("next-system");
 const hudMessage = document.getElementById("hud-message");
+const systemStage = document.querySelector(".system-stage");
+const solSystemSvg = document.querySelector(".sol-system-svg");
+const systemMeta = document.querySelector(".system-meta");
+const systemTitle = document.querySelector(".system-card h2");
+const systemCodeLabel = document.querySelector(".system-code");
+const systemSummary = document.querySelector(".system-summary");
 
 const modal = document.getElementById("planet-modal");
 const planetName = document.getElementById("planet-name");
@@ -71,7 +79,6 @@ const systemCodeInput = document.getElementById("system-code-input");
 const searchBtn = document.getElementById("search-btn");
 const searchCloseButton = searchModal ? searchModal.querySelector(".close") : null;
 
-const planetButtons = document.querySelectorAll(".planet");
 const closeButton = modal.querySelector(".close");
 
 let messageTimeout;
@@ -84,6 +91,243 @@ function showHud(text) {
   }, 2800);
 }
 
+function hideHud() {
+  window.clearTimeout(messageTimeout);
+  hudMessage.classList.remove("show");
+}
+
+function getCustomSystems() {
+  return JSON.parse(localStorage.getItem("luxMoriSystems") || "[]");
+}
+
+function getAllSystems() {
+  const customSystems = getCustomSystems().map((system) => ({
+    code: system.code,
+    name: system.name,
+    summary: system.description || "A newly forged star system in the Milky Way.",
+    starType: system.starType,
+    rings: system.rings,
+    planets: system.planets
+  }));
+
+  return [
+    {
+      code: "0001",
+      name: "Sol",
+      summary: "Uncountable generations after the Terra Exodus, survivors chart the dead light of Sol and guard what remains."
+    },
+    ...customSystems
+  ];
+}
+
+function getCurrentCode() {
+  const params = new URLSearchParams(window.location.search);
+  const requestedCode = params.get("code");
+
+  if (requestedCode && /^\d{4}$/.test(requestedCode)) {
+    return requestedCode;
+  }
+
+  return "0001";
+}
+
+function applySystemCard(system) {
+  if (systemMeta) {
+    systemMeta.textContent = "Galaxy: Milky Way";
+  }
+
+  if (systemTitle) {
+    systemTitle.textContent = `Solar System: ${system.name}`;
+  }
+
+  if (systemCodeLabel) {
+    systemCodeLabel.textContent = `Code: ${system.code}`;
+  }
+
+  if (systemSummary) {
+    if (system.code === "0001") {
+      systemSummary.textContent = system.summary;
+    } else {
+      systemSummary.textContent = `${system.summary} Star Type: ${system.starType || "Unknown"}. Orbital Rings: ${system.rings || "N/A"}. Planets: ${system.planets || "N/A"}.`;
+    }
+  }
+}
+
+function navigateToCode(code) {
+  window.location.href = `./index.html?code=${encodeURIComponent(code)}&nosplash=1`;
+}
+
+function getSortedSystems() {
+  return getAllSystems()
+    .filter((system) => /^\d{4}$/.test(system.code))
+    .sort((a, b) => Number(a.code) - Number(b.code));
+}
+
+function goToPreviousCode() {
+  const systems = getSortedSystems();
+  const currentCode = getCurrentCode();
+  const currentIndex = systems.findIndex((system) => system.code === currentCode);
+
+  if (currentIndex <= 0) {
+    showHud("No lower system code found.");
+    return;
+  }
+
+  navigateToCode(systems[currentIndex - 1].code);
+}
+
+function goToNextCode() {
+  const systems = getSortedSystems();
+
+  const currentCode = getCurrentCode();
+  const currentIndex = systems.findIndex((system) => system.code === currentCode);
+
+  if (currentIndex === -1 || currentIndex === systems.length - 1) {
+    showHud("No higher system code found.");
+    return;
+  }
+
+  navigateToCode(systems[currentIndex + 1].code);
+}
+
+const allSystems = getAllSystems();
+const initialCode = getCurrentCode();
+const activeSystem = allSystems.find((system) => system.code === initialCode) || allSystems[0];
+applySystemCard(activeSystem);
+
+function clearCustomSystemOrbits() {
+  const customOrbits = document.querySelectorAll(".custom-system-orbit");
+  customOrbits.forEach((orbit) => orbit.remove());
+}
+
+function setDefaultSolVisibility(showSol) {
+  const defaultOrbits = document.querySelectorAll(".svg-orbit");
+  defaultOrbits.forEach((orbit) => {
+    orbit.style.display = showSol ? "" : "none";
+  });
+
+  const starAnchor = document.querySelector(".star-anchor");
+  if (starAnchor) {
+    starAnchor.style.display = showSol ? "" : "none";
+  }
+
+  if (solSystemSvg) {
+    solSystemSvg.style.display = showSol ? "block" : "none";
+  }
+}
+
+function generateCustomPlanetData(planetName, system) {
+  return {
+    makeup: `Generated world in ${system.name}; composition currently unclassified.`,
+    description: `${planetName} is a forged orbiting body in system ${system.code}.`,
+    moons: "Unknown"
+  };
+}
+
+function bindCelestialInteractions() {
+  const allCelestialButtons = document.querySelectorAll(".planet");
+
+  allCelestialButtons.forEach((planet) => {
+    if (planet.dataset.bound === "1") {
+      return;
+    }
+    planet.dataset.bound = "1";
+
+    planet.addEventListener("mouseenter", () => {
+      const key = planet.dataset.planet;
+      const data = planetData[key];
+      if (!data) {
+        showHud(key);
+        return;
+      }
+      showHud(`${key} - ${data.makeup}`);
+    });
+
+    planet.addEventListener("mouseleave", hideHud);
+
+    planet.addEventListener("click", () => {
+      const key = planet.dataset.planet;
+      const data = planetData[key];
+      if (!data) {
+        return;
+      }
+
+      planetName.textContent = key;
+      planetMakeup.textContent = data.makeup;
+      planetDescription.textContent = data.description;
+      planetMoons.textContent = `Known moons: ${data.moons}`;
+      modal.showModal();
+    });
+  });
+}
+
+function renderCustomSystemStage(system) {
+  clearCustomSystemOrbits();
+  setDefaultSolVisibility(false);
+
+  const planetCount = Math.max(0, Number(system.planets) || 0);
+  const rings = Math.max(1, Math.min(12, Number(system.rings) || planetCount || 1));
+
+  const starButton = document.createElement("button");
+  starButton.className = "planet star-anchor";
+  starButton.dataset.planet = `${system.name} Star`;
+  starButton.setAttribute("aria-label", `${system.name} star`);
+  starButton.title = `${system.name} Star`;
+  starButton.innerHTML = '<img src="./assets/Sun.svg" alt="" />';
+  const center = document.querySelector(".map-center");
+  if (center) {
+    center.style.display = "flex";
+    center.innerHTML = "";
+    center.appendChild(starButton);
+  }
+  planetData[`${system.name} Star`] = generateCustomPlanetData(`${system.name} Star`, system);
+
+  for (let i = 0; i < planetCount; i += 1) {
+    const orbit = document.createElement("div");
+    orbit.className = "svg-orbit custom-system-orbit";
+    const ringIndex = (i % rings) + 1;
+    const orbitSize = 90 + ringIndex * 45 + Math.floor(i / rings) * 26;
+    orbit.style.width = `${orbitSize}px`;
+    orbit.style.height = `${orbitSize}px`;
+    orbit.style.animation = `rotateOrbit ${28 + ringIndex * 16 + i * 2}s linear infinite`;
+
+    const planet = document.createElement("button");
+    planet.className = "planet";
+    const planetNameValue = `${system.name} ${i + 1}`;
+    planet.dataset.planet = planetNameValue;
+    planet.setAttribute("aria-label", planetNameValue);
+    planet.title = planetNameValue;
+    planet.style.width = "16px";
+    planet.style.height = "16px";
+    planet.innerHTML = '<img src="./assets/Planet.svg" alt="" />';
+
+    orbit.appendChild(planet);
+    systemStage.appendChild(orbit);
+
+    planetData[planetNameValue] = generateCustomPlanetData(planetNameValue, system);
+  }
+
+  bindCelestialInteractions();
+}
+
+function renderActiveSystemStage(system) {
+  clearCustomSystemOrbits();
+
+  if (system.code === "0001") {
+    setDefaultSolVisibility(true);
+    const center = document.querySelector(".map-center");
+    if (center) {
+      center.innerHTML = '<button class="planet star-anchor" data-planet="Sol" aria-label="Sol star" title="Sol"><img src="./assets/Sun.svg" alt="" /></button>';
+    }
+    bindCelestialInteractions();
+    return;
+  }
+
+  renderCustomSystemStage(system);
+}
+
+renderActiveSystemStage(activeSystem);
+
 milkywayButton.addEventListener("click", () => {
   window.location.href = "./milkyway.html";
 });
@@ -95,12 +339,12 @@ searchSystemsButton.addEventListener("click", () => {
 searchBtn.addEventListener("click", () => {
   const code = systemCodeInput.value.trim();
   if (code.length === 4 && /^\d{4}$/.test(code)) {
-    if (code === "0001") {
-      searchModal.close();
-      showHud("Already viewing System 0001 (Sol).");
+    const found = allSystems.find((system) => system.code === code);
+    searchModal.close();
+    if (found) {
+      navigateToCode(code);
     } else {
       showHud(`System ${code} not found. Create it to claim this code.`);
-      searchModal.close();
     }
   } else {
     showHud("Please enter a valid 4-digit system code.");
@@ -124,22 +368,13 @@ createSystemButton.addEventListener("click", () => {
   window.location.href = "./create-system.html";
 });
 
-planetButtons.forEach((planet) => {
-  planet.addEventListener("click", () => {
-    const key = planet.dataset.planet;
-    const data = planetData[key];
+if (nextSystemButton) {
+  nextSystemButton.addEventListener("click", goToNextCode);
+}
 
-    if (!data) {
-      return;
-    }
-
-    planetName.textContent = key;
-    planetMakeup.textContent = data.makeup;
-    planetDescription.textContent = data.description;
-    planetMoons.textContent = `Known moons: ${data.moons}`;
-    modal.showModal();
-  });
-});
+if (prevSystemButton) {
+  prevSystemButton.addEventListener("click", goToPreviousCode);
+}
 
 closeButton.addEventListener("click", () => {
   modal.close();
