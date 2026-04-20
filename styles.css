@@ -127,53 +127,6 @@ body {
   font-size: clamp(0.95rem, 1.5vw, 1.2rem);
 }
 
-.infinite-array-button {
-  position: relative;
-  display: inline-grid;
-  place-items: center;
-  margin: 0.35rem 0 1.45rem;
-  padding: 0.9rem 1.45rem;
-  color: var(--text);
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: clamp(0.75rem, 1.1vw, 0.92rem);
-  font-weight: 600;
-  border-radius: 999px;
-  background: #0e0e0e;
-  isolation: isolate;
-  overflow: hidden;
-}
-
-.infinite-array-button::before {
-  content: "";
-  position: absolute;
-  inset: -120%;
-  background: conic-gradient(from 0deg, #ff1f71, #ff4d4d, #8d3bff, #ff1f71);
-  animation: spinInfiniteArray 2.4s linear infinite;
-  z-index: -2;
-}
-
-.infinite-array-button::after {
-  content: "";
-  position: absolute;
-  inset: 1.5px;
-  border-radius: 999px;
-  background: #090909;
-  z-index: -1;
-}
-
-.infinite-array-button span {
-  position: relative;
-  z-index: 1;
-}
-
-.infinite-array-button:hover,
-.infinite-array-button:focus-visible {
-  color: #ffffff;
-  transform: translateY(-1px);
-}
-
 .section-title {
   margin: 1.4rem 0 0.8rem;
   color: var(--muted);
@@ -250,12 +203,6 @@ body {
     transform: scale(1.35);
     opacity: 0;
     box-shadow: 0 0 0 38px rgba(255, 61, 141, 0);
-  }
-}
-
-@keyframes spinInfiniteArray {
-  to {
-    transform: rotate(1turn);
   }
 }
 
