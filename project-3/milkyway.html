@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lux Mori - Milky Way</title>
+  <link href="https://fonts.cdnfonts.com/css/druk-wide-bold" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;700&family=Montserrat:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -32,10 +33,35 @@
       </div>
     </section>
     <button id="search-systems" class="side-btn side-btn-left" title="Search solar systems" aria-label="Search solar systems">⌕</button>
+    <button id="catalog-systems" class="side-btn side-btn-left side-btn-left-lower" title="Open discovered systems catalog" aria-label="Open discovered systems catalog">≡</button>
     <button id="create-system" class="side-btn side-btn-right" title="Create solar system" aria-label="Create solar system">+</button>
+    <button id="reset-systems" class="side-btn side-btn-right side-btn-right-lower" title="Reset all forged systems" aria-label="Reset all forged systems">↺</button>
     <aside id="hud-message" class="hud-message" role="status" aria-live="polite"></aside>
   </main>
 
+  <dialog id="catalog-modal" class="planet-modal">
+    <form method="dialog" class="modal-content">
+      <button class="close" id="catalog-close" aria-label="Close catalog">x</button>
+      <h3>Systems Catalog</h3>
+      <p class="search-instruction">Discoverers are grouped once, with every system they forged listed beneath.</p>
+      <div id="catalog-content" class="catalog-content"></div>
+    </form>
+  </dialog>
+
+  <dialog id="celestial-modal" class="planet-modal">
+    <form method="dialog" class="modal-content">
+      <button class="close" aria-label="Close details">x</button>
+      <h3 id="celestial-name">Celestial Body</h3>
+      <div class="modal-preview-box">
+        <img id="celestial-image" src="./assets/Planet.svg" alt="" />
+        <p id="celestial-meta" class="preview-meta">Telemetry online</p>
+      </div>
+      <p id="celestial-description" class="makeup"></p>
+      <button type="button" id="celestial-open-btn" class="search-btn">Open System Page</button>
+    </form>
+  </dialog>
+
+  <script src="./js/audio.js"></script>
   <script src="./js/milkyway.js"></script>
 </body>
 </html>

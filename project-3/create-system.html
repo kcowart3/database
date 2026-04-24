@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lux Mori - Create Solar System</title>
+  <link href="https://fonts.cdnfonts.com/css/druk-wide-bold" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;700&family=Montserrat:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -13,57 +14,74 @@
   <div class="film-grain" aria-hidden="true"></div>
   <div class="space-backdrop sol-bg" aria-hidden="true"></div>
 
-  <header class="top-bar">
-    <div class="title-block">
-      <h1 id="mainTitle">LUX MORI</h1>
-      <p class="eyebrow">THE UNIVERSE OF DYING STARS</p>
-    </div>
-  </header>
-
   <main class="create-system-layout">
-    <section class="create-system-card">
+    <section class="create-system-card foundry-card">
       <h2>System Foundry</h2>
       <p class="foundry-intro">Design a new solar system in the Milky Way. Chart the orbits of dying stars.</p>
-      
-      <form id="create-system-form" class="system-form">
-        <div class="form-group">
-          <label for="system-name">System Name</label>
-          <input type="text" id="system-name" placeholder="Enter system name" required />
-        </div>
 
-        <div class="form-group">
-          <label for="system-code">System Code (4 digits)</label>
-          <input type="text" id="system-code" placeholder="0000" maxlength="4" pattern="[0-9]{4}" required />
-          <span class="form-hint">Choose a unique 4-digit code</span>
-        </div>
+      <div id="foundry-tabs" class="foundry-tabs" role="tablist" aria-label="Solar system builder tabs"></div>
 
-        <div class="form-group">
-          <label for="num-rings">Number of Orbital Rings</label>
-          <input type="number" id="num-rings" min="1" max="12" value="8" required />
-          <span class="form-hint">How many orbits? (1-12)</span>
-        </div>
+      <form id="create-system-form" class="system-form foundry-grid">
+        <section class="star-preview-panel" aria-live="polite">
+          <div class="star-preview-box" id="star-preview-box">
+            <div id="preview-moons" class="preview-moons" aria-hidden="true"></div>
+            <img id="sun-preview" src="./assets/Sun.svg" alt="G-type star preview" />
+            <img id="planet-preview" src="./assets/Planet.svg" alt="Planet preview" hidden />
+            <div id="star-preview-error" class="star-preview-error" hidden>
+              <p class="error-title">ERROR</p>
+              <p class="error-subtitle">Still under development</p>
+            </div>
+            <p id="preview-meta" class="preview-meta">Size: 12742 km | 00:00:00 UTC</p>
+          </div>
+          <p class="star-preview-caption" id="star-preview-caption">G-type main-sequence star selected.</p>
+        </section>
 
-        <div class="form-group">
-          <label for="star-type">Star Type</label>
-          <select id="star-type" required>
-            <option value="">Select a star type</option>
-            <option value="red-giant">Red Giant</option>
-            <option value="white-dwarf">White Dwarf</option>
-            <option value="red-dwarf">Red Dwarf</option>
-            <option value="dying">Dying Star</option>
-          </select>
-        </div>
+        <section class="foundry-panel">
+          <div id="general-tab-panel" class="tab-panel" role="tabpanel" aria-labelledby="tab-general">
+            <div class="form-group">
+              <label for="system-name">System Name</label>
+              <input type="text" id="system-name" placeholder="Enter system name" required />
+            </div>
 
-        <div class="form-group">
-          <label for="num-planets">Number of Planets</label>
-          <input type="number" id="num-planets" min="0" max="12" value="8" required />
-          <span class="form-hint">Planets to orbit (0-12)</span>
-        </div>
+            <div class="form-group">
+              <label for="system-code">System Code (4 digits)</label>
+              <div class="code-row">
+                <input type="text" id="system-code" placeholder="0000" maxlength="4" pattern="[0-9]{4}" required />
+                <button type="button" id="random-code-btn" class="code-btn">Random</button>
+              </div>
+              <span class="form-hint">Choose a unique 4-digit code</span>
+            </div>
 
-        <div class="form-group">
-          <label for="system-description">System Description</label>
-          <textarea id="system-description" placeholder="Describe this system..." rows="4"></textarea>
-        </div>
+            <div class="form-group">
+              <label for="discoverer-name">Discovered By</label>
+              <input type="text" id="discoverer-name" placeholder="Name of discoverer" required />
+            </div>
+
+            <div class="form-group">
+              <label for="star-type">Star Type</label>
+              <select id="star-type" required>
+                <option value="g-type-main-sequence">G-type main-sequence</option>
+                <option value="red-giant">Red Giant</option>
+                <option value="white-dwarf">White Dwarf</option>
+                <option value="red-dwarf">Red Dwarf</option>
+                <option value="dying">Dying Star</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="num-planets">Number of Planets</label>
+              <input type="number" id="num-planets" min="0" max="12" value="3" required />
+              <span class="form-hint">A tab appears for every planet.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="system-description">General Description</label>
+              <textarea id="system-description" placeholder="Describe this system..." rows="4"></textarea>
+            </div>
+          </div>
+
+          <div id="planet-tab-panels"></div>
+        </section>
 
         <div class="form-actions">
           <button type="button" id="cancel-btn" class="form-btn cancel-btn">Cancel</button>
@@ -73,6 +91,7 @@
     </section>
   </main>
 
+  <script src="./js/audio.js"></script>
   <script src="./js/create-system.js"></script>
 </body>
 </html>

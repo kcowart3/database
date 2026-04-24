@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.cdnfonts.com/css/druk-wide-bold" rel="stylesheet" />
+  <title>Lux Mori - Sol System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;700&family=Montserrat:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <div id="mainContent">
+    <div class="film-grain" aria-hidden="true"></div>
+    <div class="space-backdrop sol-bg" aria-hidden="true"></div>
+
+    <header class="top-bar">
+      <div class="title-block">
+        <h1 id="mainTitle">LUX MORI</h1>
+        <p class="eyebrow">THE UNIVERSE OF DYING STARS</p>
+      </div>
+      <button id="go-milkyway" class="glyph-btn" title="Return to galaxy view" aria-label="Return to galaxy view">RETURN</button>
+    </header>
+
+    <main id="universe" class="universe">
+      <section class="system-card ominous">
+        <p class="system-meta">Galaxy: Milky Way</p>
+        <h2>Solar System: Sol</h2>
+        <p class="system-code">Code: 0001</p>
+        <p class="system-summary">
+          Uncountable generations after the Terra Exodus, survivors chart the dead light of Sol and guard what remains.
+        </p>
+      </section>
+
+      <section class="system-stage" aria-label="Animated Sol system">
+        <img class="sol-system-svg" src="./assets/Sol System.svg" alt="Sol system map" />
+        <div class="map-center">
+          <button class="planet star-anchor" data-planet="Sol" aria-label="Sol star" title="Sol">
+            <img src="./assets/Sun.svg" alt="" />
+          </button>
+        </div>
+
+        <div class="svg-orbit orbit-mercury">
+          <button class="planet mercury" data-planet="Mercury"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+        <div class="svg-orbit orbit-venus">
+          <button class="planet venus" data-planet="Venus"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+        <div class="svg-orbit orbit-earth">
+          <button class="planet earth" data-planet="Earth"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+        <div class="svg-orbit orbit-mars">
+          <button class="planet mars" data-planet="Mars"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+        <div class="svg-orbit orbit-jupiter">
+          <button class="planet jupiter" data-planet="Jupiter"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+        <div class="svg-orbit orbit-saturn">
+          <button class="planet saturn" data-planet="Saturn"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+        <div class="svg-orbit orbit-uranus">
+          <button class="planet uranus" data-planet="Uranus"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+        <div class="svg-orbit orbit-neptune">
+          <button class="planet neptune" data-planet="Neptune"><img src="./assets/Planet.svg" alt="" /></button>
+        </div>
+      </section>
+
+      <button id="search-systems" class="side-btn side-btn-left" title="Search solar systems" aria-label="Search solar systems">⌕</button>
+      <button id="prev-system" class="side-btn side-btn-left side-btn-left-lower" title="Previous system code" aria-label="Previous system code">&#8592;</button>
+      <button id="create-system" class="side-btn side-btn-right" title="Create solar system" aria-label="Create solar system">+</button>
+      <button id="next-system" class="side-btn side-btn-right side-btn-right-lower" title="Next system code" aria-label="Next system code">&#8594;</button>
+      <aside id="hud-message" class="hud-message" role="status" aria-live="polite"></aside>
+    </main>
+
+    <dialog id="search-modal" class="planet-modal">
+      <form method="dialog" class="modal-content">
+        <button class="close" aria-label="Close search">x</button>
+        <h3>Search Solar Systems</h3>
+        <p class="search-instruction">Enter a 4-digit system code to navigate.</p>
+        <input type="text" id="system-code-input" class="system-code-input" placeholder="0001" maxlength="4" pattern="[0-9]{4}" />
+        <button type="button" id="search-btn" class="search-btn">Navigate</button>
+      </form>
+    </dialog>
+
+    <dialog id="planet-modal" class="planet-modal">
+      <form method="dialog" class="modal-content">
+        <button class="close" aria-label="Close details">x</button>
+        <h3 id="planet-name">Planet</h3>
+        <div class="modal-preview-box">
+          <div id="planet-viewer-moons" class="modal-preview-moons" aria-hidden="true"></div>
+          <img id="planet-viewer-image" src="./assets/Planet.svg" alt="" />
+          <p id="planet-viewer-meta" class="preview-meta">Telemetry online</p>
+        </div>
+        <p id="planet-makeup" class="makeup"></p>
+        <p id="planet-description"></p>
+        <p id="planet-moons" class="moon-count"></p>
+      </form>
+    </dialog>
+  </div>
+
+  <script src="./js/audio.js"></script>
+  <script src="./js/script.js"></script>
+</body>
+</html>

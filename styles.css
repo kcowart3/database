@@ -52,6 +52,8 @@ body {
 }
 
 .logo-svg {
+  position: relative;
+  z-index: 1;
   width: 100%;
   display: block;
   filter: drop-shadow(0 0 20px rgba(255, 74, 149, 0.12));

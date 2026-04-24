@@ -73,6 +73,10 @@ const planetName = document.getElementById("planet-name");
 const planetMakeup = document.getElementById("planet-makeup");
 const planetDescription = document.getElementById("planet-description");
 const planetMoons = document.getElementById("planet-moons");
+const planetViewerImage = document.getElementById("planet-viewer-image");
+const planetViewerMeta = document.getElementById("planet-viewer-meta");
+const planetViewerMoons = document.getElementById("planet-viewer-moons");
+const planetViewerBox = document.querySelector(".modal-preview-box");
 
 const searchModal = document.getElementById("search-modal");
 const systemCodeInput = document.getElementById("system-code-input");
@@ -82,6 +86,14 @@ const searchCloseButton = searchModal ? searchModal.querySelector(".close") : nu
 const closeButton = modal.querySelector(".close");
 
 let messageTimeout;
+
+function randomizeOrbitPhases(scope = document) {
+  const orbitNodes = scope.querySelectorAll(".svg-orbit");
+  orbitNodes.forEach((node) => {
+    const duration = Number.parseFloat(window.getComputedStyle(node).animationDuration) || 58;
+    node.style.animationDelay = `${-Math.random() * duration}s`;
+  });
+}
 function showHud(text) {
   window.clearTimeout(messageTimeout);
   hudMessage.textContent = text;
@@ -107,7 +119,8 @@ function getAllSystems() {
     summary: system.description || "A newly forged star system in the Milky Way.",
     starType: system.starType,
     rings: system.rings,
-    planets: system.planets
+    planets: system.planets,
+    planetDetails: system.planetDetails || []
   }));
 
   return [
@@ -154,7 +167,7 @@ function applySystemCard(system) {
 }
 
 function navigateToCode(code) {
-  window.location.href = `./index.html?code=${encodeURIComponent(code)}&nosplash=1`;
+  window.location.href = `./sol-system.html?code=${encodeURIComponent(code)}`;
 }
 
 function getSortedSystems() {
@@ -217,6 +230,14 @@ function setDefaultSolVisibility(showSol) {
 }
 
 function generateCustomPlanetData(planetName, system) {
+  const fromDetails = (system.planetDetails || []).find((p) => p.name === planetName);
+  if (fromDetails) {
+    return {
+      makeup: `${fromDetails.atmosphere || "Unknown"} atmosphere. Size: ${Math.round(fromDetails.sizeKm || 12742)} km.`,
+      description: fromDetails.description || `${planetName} is a forged orbiting body in system ${system.code}.`,
+      moons: Number.isFinite(fromDetails.moons) ? fromDetails.moons : "Unknown"
+    };
+  }
   return {
     makeup: `Generated world in ${system.name}; composition currently unclassified.`,
     description: `${planetName} is a forged orbiting body in system ${system.code}.`,
@@ -256,9 +277,58 @@ function bindCelestialInteractions() {
       planetMakeup.textContent = data.makeup;
       planetDescription.textContent = data.description;
       planetMoons.textContent = `Known moons: ${data.moons}`;
+      if (planetViewerImage) {
+        planetViewerImage.src = key.toLowerCase().includes("star") || key === "Sol" ? "./assets/Sun.svg" : "./assets/Planet.svg";
+      }
+      if (planetViewerMeta) {
+        planetViewerMeta.textContent = `Status: ${typeof data.moons === "number" ? `${data.moons} moons tracked` : "Star telemetry online"}`;
+      }
+      renderModalMoons(data.moons);
       modal.showModal();
     });
   });
+}
+
+function renderModalMoons(moonsCount) {
+  if (!planetViewerMoons) {
+    return;
+  }
+  planetViewerMoons.innerHTML = "";
+  const count = Number.isFinite(moonsCount) ? Math.max(0, moonsCount) : 0;
+  const fixedOrbitOffsets = [0, 16, 32, 48, 64, 80];
+  const orbitDurations = [28, 42, 58, 72, 96, 124];
+  const assignments = [];
+  for (let i = 0; i < count; i += 1) {
+    const orbitIndex = Math.floor(Math.random() * fixedOrbitOffsets.length);
+    assignments.push(orbitIndex);
+  }
+  const grouped = new Map();
+  assignments.forEach((orbitIndex, idx) => {
+    if (!grouped.has(orbitIndex)) {
+      grouped.set(orbitIndex, []);
+    }
+    grouped.get(orbitIndex).push(idx);
+  });
+
+  for (let i = 0; i < count; i += 1) {
+    const orbitIndex = assignments[i];
+    const orbitOffset = fixedOrbitOffsets[orbitIndex];
+    const indexesInBand = grouped.get(orbitIndex) || [i];
+    const idxInBand = indexesInBand.indexOf(i);
+    const angle = (idxInBand / indexesInBand.length) * 360;
+    const orbit = document.createElement("span");
+    orbit.className = "modal-moon-orbit";
+    orbit.style.setProperty("--moon-orbit", `${orbitOffset}px`);
+    orbit.style.setProperty("--moon-duration", `${orbitDurations[orbitIndex] || 58}s`);
+    orbit.style.setProperty("--moon-delay", `${Math.random() * -6}s`);
+    orbit.style.setProperty("--moon-angle", `${angle}deg`);
+    planetViewerMoons.appendChild(orbit);
+  }
+
+  if (planetViewerBox) {
+    const maxOrbit = count > 0 ? fixedOrbitOffsets[fixedOrbitOffsets.length - 1] : 0;
+    planetViewerBox.style.minHeight = `${Math.max(170, 180 + maxOrbit)}px`;
+  }
 }
 
 function renderCustomSystemStage(system) {
@@ -293,12 +363,15 @@ function renderCustomSystemStage(system) {
 
     const planet = document.createElement("button");
     planet.className = "planet";
-    const planetNameValue = `${system.name} ${i + 1}`;
+    const detail = (system.planetDetails || [])[i];
+    const planetNameValue = detail?.name || `${system.name} ${i + 1}`;
     planet.dataset.planet = planetNameValue;
     planet.setAttribute("aria-label", planetNameValue);
     planet.title = planetNameValue;
-    planet.style.width = "16px";
-    planet.style.height = "16px";
+    const sizeKm = Number(detail?.sizeKm) || 12742;
+    const px = Math.max(12, Math.min(42, Math.round((sizeKm / 12742) * 16)));
+    planet.style.width = `${px}px`;
+    planet.style.height = `${px}px`;
     planet.innerHTML = '<img src="./assets/Planet.svg" alt="" />';
 
     orbit.appendChild(planet);
@@ -327,6 +400,7 @@ function renderActiveSystemStage(system) {
 }
 
 renderActiveSystemStage(activeSystem);
+randomizeOrbitPhases();
 
 milkywayButton.addEventListener("click", () => {
   window.location.href = "./milkyway.html";
@@ -379,6 +453,22 @@ if (prevSystemButton) {
 closeButton.addEventListener("click", () => {
   modal.close();
 });
+
+if (searchModal) {
+  searchModal.addEventListener("click", (event) => {
+    if (event.target.closest(".close")) {
+      searchModal.close();
+    }
+  });
+}
+
+if (modal) {
+  modal.addEventListener("click", (event) => {
+    if (event.target.closest(".close")) {
+      modal.close();
+    }
+  });
+}
 
 modal.addEventListener("click", (event) => {
   const isOutside = event.target === modal;
