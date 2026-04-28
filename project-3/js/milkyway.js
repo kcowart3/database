@@ -3,6 +3,7 @@ const catalogSystemsButton = document.getElementById("catalog-systems");
 const createSystemButton = document.getElementById("create-system");
 const resetSystemsButton = document.getElementById("reset-systems");
 const solStarButton = document.getElementById("sol-star");
+const galaxyCoreButton = document.getElementById("galaxy-core");
 const mainTitle = document.getElementById("mainTitle");
 const hudMessage = document.getElementById("hud-message");
 const milkywayStage = document.querySelector(".milkyway-stage");
@@ -52,6 +53,30 @@ function clearCustomSystems() {
 function renderCustomSystems() {
   clearCustomSystems();
   const systems = getCustomSystems();
+  const systemsByRing = new Map();
+
+  systems.forEach((system) => {
+    const ring = Math.max(1, Math.min(5, Number(system.ring) || 5));
+    if (!systemsByRing.has(ring)) {
+      systemsByRing.set(ring, []);
+    }
+    systemsByRing.get(ring).push(system);
+  });
+
+  // Spread systems around each ring so nearby systems don't overlap.
+  systemsByRing.forEach((ringSystems) => {
+    const sorted = [...ringSystems].sort((a, b) => Number(a.code) - Number(b.code));
+    const count = sorted.length;
+    if (!count) {
+      return;
+    }
+    const baseStep = 360 / count;
+    sorted.forEach((system, index) => {
+      const jitterRange = Math.min(10, baseStep * 0.2);
+      const jitter = (Math.random() * jitterRange * 2) - jitterRange;
+      system.__orbitAngle = (index * baseStep + jitter + 360) % 360;
+    });
+  });
 
   systems.forEach((system) => {
     const orbitDiv = document.createElement("div");
@@ -61,6 +86,7 @@ function renderCustomSystems() {
     orbitDiv.style.top = "50%";
     orbitDiv.style.transform = "translate(-50%, -50%)";
     orbitDiv.style.zIndex = "25";
+    orbitDiv.style.pointerEvents = "none";
     
     const ringSize = system.ring === 1 ? 120 :
                      system.ring === 2 ? 220 :
@@ -83,6 +109,7 @@ function renderCustomSystems() {
     starButton.style.cursor = "pointer";
     starButton.style.boxShadow = "0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 255, 255, 0.4)";
     starButton.style.transition = "all 0.2s ease";
+    starButton.style.pointerEvents = "auto";
     starButton.title = `${system.name} (${system.code})`;
     
     starButton.addEventListener("mouseenter", () => {
@@ -101,14 +128,18 @@ function renderCustomSystems() {
         name: system.name,
         description: system.description || "Forged system.",
         starType: system.starType || "Unknown",
-        image: "./assets/Sun.svg",
-        code: system.code
+        image: "./assets/svg/Sun.svg",
+        code: system.code,
+        isStar: true
       });
     });
     
-    orbitDiv.style.animation = `rotateOrbit ${60 + system.ring * 20}s linear infinite`;
-    orbitDiv.style.transform = `translate(-50%, -50%) rotate(${system.angle}deg)`;
-    orbitDiv.style.animationDelay = `${-(Math.random() * (60 + system.ring * 20))}s`;
+    // Keep all rings visibly moving at comparable pace.
+    const orbitDuration = 64 + Math.random() * 14;
+    const startAngle = Number.isFinite(system.__orbitAngle) ? system.__orbitAngle : (Number(system.angle) || 0);
+    orbitDiv.style.animation = `rotateOrbit ${orbitDuration.toFixed(2)}s linear infinite`;
+    orbitDiv.style.transform = `translate(-50%, -50%) rotate(${startAngle}deg)`;
+    orbitDiv.style.animationDelay = `${-(startAngle / 360) * orbitDuration}s`;
     
     orbitDiv.appendChild(starButton);
     milkywayStage.appendChild(orbitDiv);
@@ -121,8 +152,9 @@ function openCelestialModal(payload) {
   }
   celestialName.textContent = payload.name || "Celestial Body";
   celestialDescription.textContent = payload.description || "No data available.";
-  celestialImage.src = payload.image || "./assets/Planet.svg";
-  celestialMeta.textContent = payload.starType ? `Type: ${payload.starType}` : "Telemetry online";
+  celestialImage.src = payload.image || "./assets/svg/Planet.svg";
+  celestialImage.classList.toggle("celestial-image-star", Boolean(payload.isStar));
+  celestialMeta.textContent = payload.metaText || (payload.starType ? `Type: ${payload.starType}` : "Telemetry online");
   activeCelestialCode = payload.code || null;
   if (celestialOpenBtn) {
     celestialOpenBtn.style.display = activeCelestialCode ? "block" : "none";
@@ -135,12 +167,14 @@ function openCatalog() {
     return;
   }
 
-  const systems = getCustomSystems();
-  if (!systems.length) {
-    catalogContent.innerHTML = "<p>No forged systems yet.</p>";
-    catalogModal.showModal();
-    return;
-  }
+  const systems = [
+    {
+      code: "0001",
+      name: "Sol",
+      discoveredBy: "Unknown"
+    },
+    ...getCustomSystems().filter((system) => system?.code !== "0001")
+  ];
 
   const groupedByDiscoverer = systems.reduce((acc, system) => {
     const key = (system.discoveredBy || "Unknown").trim() || "Unknown";
@@ -155,7 +189,7 @@ function openCatalog() {
   catalogContent.innerHTML = discoverers.map((discoverer) => {
     const rows = groupedByDiscoverer[discoverer]
       .sort((a, b) => Number(a.code) - Number(b.code))
-      .map((system) => `<li><strong>${system.code}</strong> - ${system.name}</li>`)
+      .map((system) => `<li><button type="button" class="search-btn catalog-open-system" data-code="${system.code}"><strong>${system.code}</strong> - ${system.name}</button></li>`)
       .join("");
 
     return `<section class="catalog-discoverer"><h4>${discoverer}</h4><ul>${rows}</ul></section>`;
@@ -174,7 +208,14 @@ if (mainTitle) {
 }
 
 solStarButton.addEventListener("click", () => {
-  goToSystem("0001");
+  openCelestialModal({
+    name: "Sol",
+    description: "Uncountable generations after the Terra Exodus, survivors chart the dead light of Sol and guard what remains.",
+    starType: "g-type-main-sequence",
+    image: "./assets/svg/Sun.svg",
+    code: "0001",
+    isStar: true
+  });
 });
 
 solStarButton.addEventListener("mouseenter", () => {
@@ -184,6 +225,26 @@ solStarButton.addEventListener("mouseenter", () => {
 solStarButton.addEventListener("mouseleave", () => {
   hudMessage.classList.remove("show");
 });
+
+if (galaxyCoreButton) {
+  galaxyCoreButton.addEventListener("mouseenter", () => {
+    showHud("Galactic Core: Unknown");
+  });
+
+  galaxyCoreButton.addEventListener("mouseleave", () => {
+    hudMessage.classList.remove("show");
+  });
+
+  galaxyCoreButton.addEventListener("click", () => {
+    openCelestialModal({
+      name: "Galactic Core",
+      description: "The center of the galaxy...",
+      metaText: "Size: UNKNOWN | Atmosphere: UNKNOWN",
+      image: "./assets/svg/LM Black hole.svg",
+      isStar: true
+    });
+  });
+}
 
 searchSystemsButton.addEventListener("click", () => {
   const code = prompt("Enter a 4-digit system code to search (Sol is 0001):");
@@ -221,6 +282,15 @@ if (catalogModal) {
   });
 
   catalogModal.addEventListener("click", (event) => {
+    const openButton = event.target.closest(".catalog-open-system");
+    if (openButton) {
+      const code = openButton.dataset.code;
+      if (code) {
+        catalogModal.close();
+        goToSystem(code);
+      }
+      return;
+    }
     if (event.target === catalogModal) {
       catalogModal.close();
     }

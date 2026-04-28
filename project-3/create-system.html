@@ -25,8 +25,8 @@
         <section class="star-preview-panel" aria-live="polite">
           <div class="star-preview-box" id="star-preview-box">
             <div id="preview-moons" class="preview-moons" aria-hidden="true"></div>
-            <img id="sun-preview" src="./assets/Sun.svg" alt="G-type star preview" />
-            <img id="planet-preview" src="./assets/Planet.svg" alt="Planet preview" hidden />
+            <img id="sun-preview" src="./assets/svg/Sun.svg" alt="G-type star preview" />
+            <img id="planet-preview" src="./assets/svg/Planet.svg" alt="Planet preview" hidden />
             <div id="star-preview-error" class="star-preview-error" hidden>
               <p class="error-title">ERROR</p>
               <p class="error-subtitle">Still under development</p>
@@ -70,8 +70,9 @@
 
             <div class="form-group">
               <label for="num-planets">Number of Planets</label>
-              <input type="number" id="num-planets" min="0" max="12" value="3" required />
+              <input type="number" id="num-planets" min="0" max="8" value="3" required />
               <span class="form-hint">A tab appears for every planet.</span>
+              <span id="planet-limit-note" class="form-hint moon-limit-note" hidden>Planet limit reached (8).</span>
             </div>
 
             <div class="form-group">

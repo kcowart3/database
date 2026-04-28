@@ -1,0 +1,140 @@
+:root {
+  --bg: #070707;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+}
+
+body {
+  overflow: hidden;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+.splash-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  position: relative;
+  background: radial-gradient(circle at 50% 42%, #161616 0%, var(--bg) 60%);
+}
+
+.splash-page::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background: radial-gradient(circle at 42% 38%, rgba(255, 255, 255, 0.055), transparent 45%),
+    radial-gradient(circle at 65% 65%, rgba(255, 255, 255, 0.035), transparent 48%);
+  filter: blur(36px);
+  animation: ambientPulse 12s ease-in-out infinite;
+}
+
+.splash-page::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 79, 167, 0.28), rgba(164, 67, 255, 0.14) 34%, transparent 62%);
+  transform: scale(0.72);
+}
+
+.logo-button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  width: min(60vw, 470px);
+  min-width: 210px;
+  padding: clamp(0.6rem, 1.8vw, 1rem);
+  z-index: 2;
+}
+
+.logo-svg {
+  width: 100%;
+  display: block;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.12));
+  transition: transform 1200ms cubic-bezier(0.22, 1, 0.36, 1), filter 1200ms ease, opacity 1200ms ease;
+}
+
+.logo-fill {
+  fill: url(#logoGradient);
+  opacity: 0;
+  transition: opacity 460ms ease;
+}
+
+.logo-outline {
+  fill: transparent;
+  stroke: url(#logoGradient);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+
+.logo-button.playing .logo-svg {
+  transform: scale(1.14);
+  filter: drop-shadow(0 0 26px rgba(255, 74, 149, 0.5));
+}
+
+.logo-button.playing .logo-fill {
+  opacity: 1;
+}
+
+.splash-page.pulse::after {
+  animation: screenPulse 920ms ease-out forwards;
+}
+
+.splash-page.exit .logo-svg {
+  transform: scale(1.32);
+  opacity: 0;
+}
+
+@keyframes ambientPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes screenPulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+  35% {
+    opacity: 0.42;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-page::before {
+    animation: none;
+  }
+
+  .splash-page.pulse::after {
+    animation: none;
+    opacity: 0.2;
+    transform: scale(1);
+  }
+
+  .logo-svg {
+    transition: none;
+  }
+}

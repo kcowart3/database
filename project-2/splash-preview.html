@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fantaclean Splash Preview</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #070707;
+      }
+
+      .preview {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle at 50% 35%, #181818 0%, #070707 70%);
+        position: relative;
+      }
+
+      .preview::before {
+        content: "";
+        position: absolute;
+        inset: -20%;
+        background: radial-gradient(circle at 55% 42%, rgba(255, 82, 165, 0.22), transparent 40%);
+        filter: blur(18px);
+        animation: glow 4.8s ease-in-out infinite;
+      }
+
+      img {
+        width: min(80%, 340px);
+        max-height: 72%;
+        object-fit: contain;
+        position: relative;
+        z-index: 1;
+        animation: pop 4.8s ease-in-out infinite;
+      }
+
+      @keyframes pop {
+        0%,
+        100% {
+          opacity: 0.2;
+          transform: scale(0.94);
+        }
+        26%,
+        72% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes glow {
+        0%,
+        100% {
+          opacity: 0.2;
+          transform: scale(0.9);
+        }
+        40% {
+          opacity: 0.9;
+          transform: scale(1.05);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview">
+      <img src="images/FClogo_splash_FC2.svg" alt="" />
+    </div>
+  </body>
+</html>

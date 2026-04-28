@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lux Mori Splash Preview</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #060606;
+        font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+      }
+
+      .preview {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        position: relative;
+        background: radial-gradient(circle at 50% 30%, #1a1a1a 0%, #060606 70%);
+      }
+
+      .preview::before {
+        content: "";
+        position: absolute;
+        inset: -25%;
+        background: radial-gradient(circle at 50% 40%, rgba(209, 96, 255, 0.18), transparent 45%),
+          radial-gradient(circle at 60% 60%, rgba(255, 112, 90, 0.14), transparent 44%);
+        filter: blur(24px);
+        animation: nebula 6.4s ease-in-out infinite;
+      }
+
+      .logo {
+        width: min(56%, 210px);
+        max-height: 52%;
+        object-fit: contain;
+        position: relative;
+        z-index: 1;
+        animation: reveal 6.4s ease-in-out infinite;
+      }
+
+      .title {
+        position: absolute;
+        bottom: 12%;
+        margin: 0;
+        letter-spacing: 0.2em;
+        font-size: clamp(10px, 1.25vw, 16px);
+        color: rgba(255, 255, 255, 0.82);
+        animation: revealText 6.4s ease-in-out infinite;
+      }
+
+      @keyframes reveal {
+        0%,
+        100% {
+          opacity: 0;
+          transform: scale(0.88);
+        }
+        25%,
+        72% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes revealText {
+        0%,
+        100% {
+          opacity: 0;
+        }
+        36%,
+        72% {
+          opacity: 0.9;
+        }
+      }
+
+      @keyframes nebula {
+        0%,
+        100% {
+          opacity: 0.3;
+          transform: scale(0.94);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.08);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview">
+      <img class="logo" src="assets/svg/LM Logo.svg" alt="" />
+      <p class="title">LUX MORI</p>
+    </div>
+  </body>
+</html>

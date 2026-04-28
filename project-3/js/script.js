@@ -232,16 +232,19 @@ function setDefaultSolVisibility(showSol) {
 function generateCustomPlanetData(planetName, system) {
   const fromDetails = (system.planetDetails || []).find((p) => p.name === planetName);
   if (fromDetails) {
+    const sizeKm = Math.max(1000, Number(fromDetails.sizeKm) || 12742);
     return {
-      makeup: `${fromDetails.atmosphere || "Unknown"} atmosphere. Size: ${Math.round(fromDetails.sizeKm || 12742)} km.`,
+      makeup: `${fromDetails.atmosphere || "Unknown"} atmosphere. Size: ${Math.round(sizeKm)} km.`,
       description: fromDetails.description || `${planetName} is a forged orbiting body in system ${system.code}.`,
-      moons: Number.isFinite(fromDetails.moons) ? fromDetails.moons : "Unknown"
+      moons: Number.isFinite(fromDetails.moons) ? fromDetails.moons : "Unknown",
+      sizeKm
     };
   }
   return {
     makeup: `Generated world in ${system.name}; composition currently unclassified.`,
     description: `${planetName} is a forged orbiting body in system ${system.code}.`,
-    moons: "Unknown"
+    moons: "Unknown",
+    sizeKm: 12742
   };
 }
 
@@ -278,10 +281,22 @@ function bindCelestialInteractions() {
       planetDescription.textContent = data.description;
       planetMoons.textContent = `Known moons: ${data.moons}`;
       if (planetViewerImage) {
-        planetViewerImage.src = key.toLowerCase().includes("star") || key === "Sol" ? "./assets/Sun.svg" : "./assets/Planet.svg";
+        const isStar = key.toLowerCase().includes("star") || key === "Sol";
+        planetViewerImage.src = isStar ? "./assets/svg/Sun.svg" : "./assets/svg/Planet.svg";
+        planetViewerImage.classList.toggle("modal-image-star", isStar);
+        if (isStar) {
+          planetViewerImage.style.width = "96px";
+          planetViewerImage.style.height = "96px";
+        } else {
+          const sizeKm = Math.max(1000, Number(data.sizeKm) || 12742);
+          const px = Math.max(56, Math.min(170, Math.round((sizeKm / 12742) * 96)));
+          planetViewerImage.style.width = `${px}px`;
+          planetViewerImage.style.height = `${px}px`;
+        }
       }
       if (planetViewerMeta) {
-        planetViewerMeta.textContent = `Status: ${typeof data.moons === "number" ? `${data.moons} moons tracked` : "Star telemetry online"}`;
+        const sizeText = Number.isFinite(Number(data.sizeKm)) ? ` | Size: ${Math.round(Number(data.sizeKm))} km` : "";
+        planetViewerMeta.textContent = `Status: ${typeof data.moons === "number" ? `${data.moons} moons tracked` : "Star telemetry online"}${sizeText}`;
       }
       renderModalMoons(data.moons);
       modal.showModal();
@@ -343,7 +358,7 @@ function renderCustomSystemStage(system) {
   starButton.dataset.planet = `${system.name} Star`;
   starButton.setAttribute("aria-label", `${system.name} star`);
   starButton.title = `${system.name} Star`;
-  starButton.innerHTML = '<img src="./assets/Sun.svg" alt="" />';
+  starButton.innerHTML = '<img src="./assets/svg/Sun.svg" alt="" />';
   const center = document.querySelector(".map-center");
   if (center) {
     center.style.display = "flex";
@@ -372,7 +387,7 @@ function renderCustomSystemStage(system) {
     const px = Math.max(12, Math.min(42, Math.round((sizeKm / 12742) * 16)));
     planet.style.width = `${px}px`;
     planet.style.height = `${px}px`;
-    planet.innerHTML = '<img src="./assets/Planet.svg" alt="" />';
+    planet.innerHTML = '<img src="./assets/svg/Planet.svg" alt="" />';
 
     orbit.appendChild(planet);
     systemStage.appendChild(orbit);
@@ -390,7 +405,7 @@ function renderActiveSystemStage(system) {
     setDefaultSolVisibility(true);
     const center = document.querySelector(".map-center");
     if (center) {
-      center.innerHTML = '<button class="planet star-anchor" data-planet="Sol" aria-label="Sol star" title="Sol"><img src="./assets/Sun.svg" alt="" /></button>';
+      center.innerHTML = '<button class="planet star-anchor" data-planet="Sol" aria-label="Sol star" title="Sol"><img src="./assets/svg/Sun.svg" alt="" /></button>';
     }
     bindCelestialInteractions();
     return;

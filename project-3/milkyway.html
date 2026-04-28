@@ -10,14 +10,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;700&family=Montserrat:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./css/styles.css" />
 </head>
-<body>
+<body class="milkyway-page">
   <div class="film-grain" aria-hidden="true"></div>
   <div class="space-backdrop sol-bg" aria-hidden="true"></div>
 
   <header class="top-bar">
     <div class="title-block">
-      <h1 id="mainTitle">LUX MORI</h1>
-      <p class="eyebrow">THE UNIVERSE OF DYING STARS</p>
+      <p class="splash-text" id="mainTitle"><span class="splash-text-word">LUX</span><span class="splash-text-word">MORI</span></p>
+      <p class="splash-subtitle">THE UNIVERSE OF DYING STARS</p>
     </div>
   </header>
 
@@ -28,6 +28,9 @@
       <div class="milkyway-ring mw-3"></div>
       <div class="milkyway-ring mw-4"></div>
       <div class="milkyway-ring mw-5"></div>
+      <button class="galaxy-core galaxy-star" id="galaxy-core" title="Galactic Core" aria-label="Inspect galactic core">
+        <img src="./assets/svg/LM Black hole.svg" alt="" />
+      </button>
       <div class="orbit-sol">
         <button class="sol-star galaxy-star" id="sol-star" title="Sol System" aria-label="Navigate to Sol System"></button>
       </div>
@@ -53,7 +56,7 @@
       <button class="close" aria-label="Close details">x</button>
       <h3 id="celestial-name">Celestial Body</h3>
       <div class="modal-preview-box">
-        <img id="celestial-image" src="./assets/Planet.svg" alt="" />
+        <img id="celestial-image" src="./assets/svg/Planet.svg" alt="" />
         <p id="celestial-meta" class="preview-meta">Telemetry online</p>
       </div>
       <p id="celestial-description" class="makeup"></p>

@@ -8,57 +8,116 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="hero">
-      <button id="logoTrigger" class="logo-button" aria-label="Activate KC logo">
-        <svg class="logo-svg" viewBox="0 0 710 710" aria-hidden="true" role="img">
-          <defs>
-            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#ff1f71">
-                <animate attributeName="stop-color" values="#ff1f71;#ff4d4d;#c035ff;#ff1f71" dur="3.5s" repeatCount="indefinite" />
-              </stop>
-              <stop offset="50%" stop-color="#ff4d4d">
-                <animate attributeName="offset" values="0.2;0.8;0.2" dur="2.8s" repeatCount="indefinite" />
-              </stop>
-              <stop offset="100%" stop-color="#8d3bff">
-                <animate attributeName="stop-color" values="#8d3bff;#ff1f71;#8d3bff" dur="4s" repeatCount="indefinite" />
-              </stop>
-            </linearGradient>
-          </defs>
-
-          <path
-            class="logo-fill"
-            d="M452.42,239.43l-23.78,43.58,50.17,26.59-26.23,45.4-97.28-50.16,64.45-117.74h129.79s-30.51,52.83-30.51,52.83l-66.61-.51ZM440.43,376.55l-119.16-60.17,69.77-129.28h-61.79l-50.26,98.33-56.58-98.33h-61.36s194.21,336.37,194.21,336.37l30.61-52.99-53.18-92.22,79.89,46.02,27.86-47.74Z"
-          />
-          <path
-            class="logo-outline"
-            d="M452.42,239.43l-23.78,43.58,50.17,26.59-26.23,45.4-97.28-50.16,64.45-117.74h129.79s-30.51,52.83-30.51,52.83l-66.61-.51ZM440.43,376.55l-119.16-60.17,69.77-129.28h-61.79l-50.26,98.33-56.58-98.33h-61.36s194.21,336.37,194.21,336.37l30.61-52.99-53.18-92.22,79.89,46.02,27.86-47.74Z"
-          />
-        </svg>
+    <header class="top-nav">
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteMenu" aria-label="Open navigation menu">
+        <span class="menu-line"></span>
+        <span class="menu-line"></span>
+        <span class="menu-line"></span>
       </button>
-    </main>
-    <main id="mainSite" class="main-site" aria-hidden="true">
-      <h1 class="main-title">Kian Cowart</h1>
-      <p class="main-lead">Digital designer and creative developer. Minimal form, high contrast, expressive interaction.</p>
-      <h2 class="section-title">Projects</h2>
-      <ul class="main-links">
-        <li><a href="project-1/main.html">Project 1 - House of Multitudes</a></li>
-        <li><a href="project-2/index.html">Project 2 - Fantaclean</a></li>
-        <li><a href="project-3/index.html">Project 3 - Lux Mori</a></li>
-      </ul>
-      <h2 class="section-title">Exercises</h2>
-      <ul class="main-links main-links-exercises">
-        <li>Pixel Portrait (see the icon on the tab)</li>
-        <li><a href="https://kcowart3.github.io/Abstract-composition-codepad/">Abstract composition</a></li>
-        <li><a href="https://kcowart3.github.io/flexbox/">Flexbox challenge</a></li>
-        <li><a href="https://kcowart3.github.io/Arrangment-of-pictures/">Arrangement of pictures</a></li>
-        <li><a href="https://kcowart3.github.io/Animation-Testing/main.html">Ambient webpage</a></li>
-        <li><a href="https://kcowart3.github.io/Responsive-Page/">Responsive webpage</a></li>
-        <li><a href="https://kcowart3.github.io/still-life/">Still Life</a></li>
-        <li><a href="https://kcowart3.github.io/Click-and-hover/">Click and Hover</a></li>
-        <li><a href="https://kcowart3.github.io/Clock/">Clock</a></li>
-        <li><a href="https://kcowart3.github.io/billboard/">Billboard</a></li>
-        <li><a href="https://kcowart3.github.io/infinite-array/">Infinite Array</a></li>
-      </ul>
+
+      <div class="brand-lockup" aria-label="Kian Cowart">
+        <span class="brand-name">Kian</span>
+        <a class="brand-logo-link" href="splash.html" aria-label="Go to splash screen">
+          <svg class="logo-svg" viewBox="0 0 710 710" aria-hidden="true" role="img">
+            <defs>
+              <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff1f71"></stop>
+                <stop offset="100%" stop-color="#8d3bff"></stop>
+              </linearGradient>
+            </defs>
+            <path
+              class="logo-fill"
+              d="M452.42,239.43l-23.78,43.58,50.17,26.59-26.23,45.4-97.28-50.16,64.45-117.74h129.79s-30.51,52.83-30.51,52.83l-66.61-.51ZM440.43,376.55l-119.16-60.17,69.77-129.28h-61.79l-50.26,98.33-56.58-98.33h-61.36s194.21,336.37,194.21,336.37l30.61-52.99-53.18-92.22,79.89,46.02,27.86-47.74Z"
+            />
+          </svg>
+        </a>
+        <span class="brand-name">Cowart</span>
+      </div>
+
+      <nav id="siteMenu" class="site-menu" aria-label="Section navigation">
+        <a href="#classes">Classes</a>
+        <a href="#projects">Projects</a>
+        <a href="#jobs">Jobs</a>
+        <a href="#about">About</a>
+      </nav>
+    </header>
+
+    <main class="portfolio-page">
+      <section id="classes" class="section">
+        <h2>[Not yet implemented] Class Projects</h2>
+        <p>Placeholders for class work and process documentation.</p>
+        <div class="media-strip" data-speed="28s">
+          <div class="media-viewport">
+            <div class="media-row">
+              <article class="media-frame">Class Frame 01</article>
+              <article class="media-frame">Class Frame 02</article>
+              <article class="media-frame">Class Frame 03</article>
+              <article class="media-frame">Class Frame 04</article>
+            </div>
+          </div>
+          <button class="row-arrow row-arrow-burst" type="button" aria-label="Speed row briefly">▶</button>
+        </div>
+      </section>
+
+      <section id="projects" class="section">
+        <h2>Local Software Class Projects</h2>
+        <p>Rows for portfolio projects and featured builds.</p>
+        <div class="media-strip media-strip-reverse" data-speed="24s">
+          <div class="media-viewport">
+            <div class="media-row">
+              <a class="media-frame media-frame-preview media-frame-project1" href="project-1/main.html" aria-label="Open Project 1: House of Multitudes">
+                <span class="frame-label">Project 1</span>
+              </a>
+              <a class="media-frame media-frame-preview media-frame-project2" href="project-2/index.html" aria-label="Open Project 2: Fantaclean">
+                <span class="frame-preview-embed splash-loop splash-loop-p2" aria-hidden="true"></span>
+                <span class="frame-label">Project 2</span>
+              </a>
+              <a class="media-frame media-frame-preview media-frame-project3" href="project-3/index.html" aria-label="Open Project 3: Lux Mori">
+                <span class="frame-preview-embed splash-loop splash-loop-p3" aria-hidden="true"></span>
+                <span class="frame-label">Project 3</span>
+              </a>
+              <a class="media-frame media-frame-preview media-frame-project1" href="project-1/main.html" aria-label="Open Project 1: House of Multitudes">
+                <span class="frame-label">Project 1</span>
+              </a>
+              <a class="media-frame media-frame-preview media-frame-project2" href="project-2/index.html" aria-label="Open Project 2: Fantaclean">
+                <span class="frame-preview-embed splash-loop splash-loop-p2" aria-hidden="true"></span>
+                <span class="frame-label">Project 2</span>
+              </a>
+              <a class="media-frame media-frame-preview media-frame-project3" href="project-3/index.html" aria-label="Open Project 3: Lux Mori">
+                <span class="frame-preview-embed splash-loop splash-loop-p3" aria-hidden="true"></span>
+                <span class="frame-label">Project 3</span>
+              </a>
+              <article class="media-frame">Project Frame 04</article>
+              <article class="media-frame">Project Frame 05</article>
+            </div>
+          </div>
+          <button class="row-arrow row-arrow-burst" type="button" aria-label="Speed row briefly">▶</button>
+        </div>
+      </section>
+
+      <section id="jobs" class="section">
+        <h2>Freelance Work</h2>
+        <p>Rows for professional and freelance work examples.</p>
+        <div class="media-strip" data-speed="30s">
+          <div class="media-viewport">
+            <div class="media-row">
+              <article class="media-frame">Job Frame 01</article>
+              <article class="media-frame">Job Frame 02</article>
+              <article class="media-frame">Job Frame 03</article>
+              <article class="media-frame">Job Frame 04</article>
+              <article class="media-frame">Job Frame 05</article>
+            </div>
+          </div>
+          <button class="row-arrow row-arrow-burst" type="button" aria-label="Speed row briefly">▶</button>
+        </div>
+      </section>
+
+      <section id="about" class="section about-section">
+        <h2>About Me</h2>
+        <p>
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        </p>
+      </section>
     </main>
 
     <script src="main.js" defer></script>

@@ -22,9 +22,15 @@ let previewScanTimer;
 let codeRollTimer;
 let previewClockTimer;
 const EARTH_DIAMETER_KM = 12742;
+const PLANET_SIZE_MIN = 1000;
+const PLANET_SIZE_MAX = 250000;
+const PLANET_LIMIT = 8;
+const MOON_LIMIT = 50;
 let currentPreviewSizeKm = EARTH_DIAMETER_KM;
 let currentPreviewOrbitIndex = 0;
 const moonOrbitCache = {};
+const moonRollTimers = new Map();
+const planetSizeRollTimers = new Map();
 
 if (mainTitle) {
   mainTitle.addEventListener("click", () => {
@@ -84,12 +90,20 @@ function createPlanetPanel(index) {
     </div>
     <div class="form-group">
       <label for="planet-size-${index}">Planet Size (km diameter)</label>
-      <input type="number" id="planet-size-${index}" min="1000" max="250000" value="${EARTH_DIAMETER_KM}" />
+      <div class="code-row">
+        <input type="number" id="planet-size-${index}" min="${PLANET_SIZE_MIN}" max="${PLANET_SIZE_MAX}" value="${EARTH_DIAMETER_KM}" />
+        <button type="button" id="planet-size-random-${index}" class="code-btn">Random</button>
+      </div>
       <span class="form-hint">Defaults to Earth diameter.</span>
+      <span id="planet-size-limit-${index}" class="form-hint moon-limit-note" hidden></span>
     </div>
     <div class="form-group">
       <label for="planet-moons-${index}">Moon Count</label>
-      <input type="number" id="planet-moons-${index}" min="0" max="24" value="0" />
+      <div class="code-row">
+        <input type="number" id="planet-moons-${index}" min="0" max="${MOON_LIMIT}" value="0" />
+        <button type="button" id="planet-moons-random-${index}" class="code-btn">Random</button>
+      </div>
+      <span id="planet-moons-limit-${index}" class="form-hint moon-limit-note" hidden>Moon limit reached (${MOON_LIMIT}).</span>
     </div>
     <div class="form-group">
       <label for="planet-description-${index}">General Description</label>
@@ -207,7 +221,11 @@ function triggerPreviewScan() {
 }
 
 function renderTabs() {
-  const planetsCount = Math.max(0, Math.min(12, Number(numPlanetsInput.value) || 0));
+  moonRollTimers.forEach((timerId) => window.clearInterval(timerId));
+  moonRollTimers.clear();
+  planetSizeRollTimers.forEach((timerId) => window.clearInterval(timerId));
+  planetSizeRollTimers.clear();
+  const planetsCount = Math.max(0, Math.min(PLANET_LIMIT, Number(numPlanetsInput.value) || 0));
   const isAddingPlanets = planetsCount > previousPlanetCount;
   planetPanels.innerHTML = "";
   for (let i = 0; i < planetsCount; i += 1) {
@@ -246,19 +264,110 @@ function renderTabs() {
     });
 
     const sizeInput = document.getElementById(`planet-size-${i}`);
+    const sizeRandomButton = document.getElementById(`planet-size-random-${i}`);
     const moonsInput = document.getElementById(`planet-moons-${i}`);
+    const moonRandomButton = document.getElementById(`planet-moons-random-${i}`);
     if (sizeInput) {
+      sizeInput.addEventListener("keydown", (event) => {
+        const currentValue = Math.max(PLANET_SIZE_MIN, Math.min(PLANET_SIZE_MAX, Number(sizeInput.value) || EARTH_DIAMETER_KM));
+        if ((event.key === "ArrowUp" || event.key === "PageUp") && currentValue >= PLANET_SIZE_MAX) {
+          triggerPlanetSizeLimitFeedback(i);
+        }
+        if ((event.key === "ArrowDown" || event.key === "PageDown") && currentValue <= PLANET_SIZE_MIN) {
+          triggerPlanetSizeLimitFeedback(i);
+        }
+      });
       sizeInput.addEventListener("input", () => {
+        const rawValue = Number(sizeInput.value);
+        const attemptedAboveMax = Number.isFinite(rawValue) && rawValue > PLANET_SIZE_MAX;
+        const attemptedBelowMin = Number.isFinite(rawValue) && rawValue < PLANET_SIZE_MIN;
+        const normalized = Math.max(PLANET_SIZE_MIN, Math.min(PLANET_SIZE_MAX, rawValue || EARTH_DIAMETER_KM));
+        sizeInput.value = String(normalized);
+        sizeInput.dataset.prevValue = String(normalized);
+        const shouldShowMin = normalized <= PLANET_SIZE_MIN;
+        const shouldShowMax = normalized >= PLANET_SIZE_MAX;
+        setPlanetSizeLimitNoteVisible(i, shouldShowMin, shouldShowMax);
+        if (attemptedAboveMax || attemptedBelowMin) {
+          triggerPlanetSizeLimitFeedback(i);
+        }
         if (tab.classList.contains("is-active")) {
           updatePreviewForTab(tab.dataset.panel);
         }
       });
+      sizeInput.dataset.prevValue = sizeInput.value;
+    }
+    if (sizeInput && sizeRandomButton) {
+      sizeRandomButton.addEventListener("click", () => {
+        const finalSize = Math.floor(Math.random() * (PLANET_SIZE_MAX - PLANET_SIZE_MIN + 1)) + PLANET_SIZE_MIN;
+        const existingTimer = planetSizeRollTimers.get(i);
+        if (existingTimer) {
+          window.clearInterval(existingTimer);
+        }
+        sizeRandomButton.disabled = true;
+        const start = Date.now();
+        const durationMs = 820;
+        const timerId = window.setInterval(() => {
+          const rolling = Math.floor(Math.random() * (PLANET_SIZE_MAX - PLANET_SIZE_MIN + 1)) + PLANET_SIZE_MIN;
+          sizeInput.value = String(rolling);
+          sizeInput.dispatchEvent(new Event("input", { bubbles: true }));
+          if (Date.now() - start >= durationMs) {
+            window.clearInterval(timerId);
+            planetSizeRollTimers.delete(i);
+            sizeInput.value = String(finalSize);
+            sizeInput.dispatchEvent(new Event("input", { bubbles: true }));
+            sizeRandomButton.disabled = false;
+          }
+        }, 48);
+        planetSizeRollTimers.set(i, timerId);
+      });
     }
     if (moonsInput) {
+      moonsInput.addEventListener("keydown", (event) => {
+        const currentValue = Math.max(0, Math.min(MOON_LIMIT, Number(moonsInput.value) || 0));
+        if ((event.key === "ArrowUp" || event.key === "PageUp") && currentValue >= MOON_LIMIT) {
+          triggerMoonLimitFeedback(i);
+        }
+      });
       moonsInput.addEventListener("input", () => {
+        const rawValue = Number(moonsInput.value);
+        const attemptedAboveLimit = Number.isFinite(rawValue) && rawValue > MOON_LIMIT;
+        const normalized = Math.max(0, Math.min(MOON_LIMIT, rawValue || 0));
+        moonsInput.value = String(normalized);
+        moonsInput.dataset.prevValue = String(normalized);
+        const shouldShowLimit = normalized >= MOON_LIMIT;
+        setMoonLimitNoteVisible(i, shouldShowLimit);
+        if (attemptedAboveLimit) {
+          triggerMoonLimitFeedback(i);
+        }
         if (tab.classList.contains("is-active")) {
           updatePreviewForTab(tab.dataset.panel);
         }
+      });
+      moonsInput.dataset.prevValue = moonsInput.value;
+    }
+    if (moonsInput && moonRandomButton) {
+      moonRandomButton.addEventListener("click", () => {
+        const finalMoons = Math.floor(Math.random() * (MOON_LIMIT + 1));
+        const existingTimer = moonRollTimers.get(i);
+        if (existingTimer) {
+          window.clearInterval(existingTimer);
+        }
+        moonRandomButton.disabled = true;
+        const start = Date.now();
+        const durationMs = 820;
+        const timerId = window.setInterval(() => {
+          const rolling = Math.floor(Math.random() * (MOON_LIMIT + 1));
+          moonsInput.value = String(rolling);
+          moonsInput.dispatchEvent(new Event("input", { bubbles: true }));
+          if (Date.now() - start >= durationMs) {
+            window.clearInterval(timerId);
+            moonRollTimers.delete(i);
+            moonsInput.value = String(finalMoons);
+            moonsInput.dispatchEvent(new Event("input", { bubbles: true }));
+            moonRandomButton.disabled = false;
+          }
+        }, 48);
+        moonRollTimers.set(i, timerId);
       });
     }
   }
@@ -268,7 +377,7 @@ function renderTabs() {
 }
 
 function syncDefaultPlanetNamesFromHost() {
-  const planetsCount = Math.max(0, Math.min(12, Number(numPlanetsInput.value) || 0));
+  const planetsCount = Math.max(0, Math.min(PLANET_LIMIT, Number(numPlanetsInput.value) || 0));
   for (let i = 0; i < planetsCount; i += 1) {
     const input = document.getElementById(`planet-name-${i}`);
     const tab = document.getElementById(`tab-planet-${i}`);
@@ -343,9 +452,9 @@ function renderPreviewMoons(count, planetSizeKm, panelId) {
     return;
   }
   previewMoons.innerHTML = "";
-  const moonsCount = Math.max(0, Math.min(24, Number(count) || 0));
+  const moonsCount = Math.max(0, Math.min(MOON_LIMIT, Number(count) || 0));
   const sizeScale = Math.max(0.8, Math.min(2.2, Number(planetSizeKm || EARTH_DIAMETER_KM) / EARTH_DIAMETER_KM));
-  const fixedOrbitOffsets = [0, 16, 32, 48, 64];
+  const fixedOrbitOffsets = [10, 26, 42, 58, 74];
   const orbitDurations = [28, 42, 58, 72, 96];
   const cacheKey = panelId || activePanelId || "planet";
   if (!moonOrbitCache[cacheKey]) {
@@ -389,6 +498,88 @@ function renderPreviewMoons(count, planetSizeKm, panelId) {
   }
 }
 
+function setMoonLimitNoteVisible(index, visible) {
+  const note = document.getElementById(`planet-moons-limit-${index}`);
+  if (!note) {
+    return;
+  }
+  note.hidden = !visible;
+}
+
+function setPlanetSizeLimitNoteVisible(index, atMin, atMax) {
+  const note = document.getElementById(`planet-size-limit-${index}`);
+  if (!note) {
+    return;
+  }
+  if (atMax) {
+    note.textContent = `Maximum diameter reached (${PLANET_SIZE_MAX.toLocaleString()} km).`;
+    note.hidden = false;
+  } else if (atMin) {
+    note.textContent = `Minimum diameter reached (${PLANET_SIZE_MIN.toLocaleString()} km).`;
+    note.hidden = false;
+  } else {
+    note.hidden = true;
+  }
+}
+
+function setPlanetLimitNoteVisible(visible) {
+  const note = document.getElementById("planet-limit-note");
+  if (!note) {
+    return;
+  }
+  note.hidden = !visible;
+}
+
+function triggerMoonLimitFeedback(index) {
+  const moonsInput = document.getElementById(`planet-moons-${index}`);
+  if (!moonsInput) {
+    return;
+  }
+  moonsInput.classList.remove("input-limit-shake");
+  void moonsInput.offsetWidth;
+  moonsInput.classList.add("input-limit-shake");
+  moonsInput.addEventListener(
+    "animationend",
+    () => {
+      moonsInput.classList.remove("input-limit-shake");
+    },
+    { once: true }
+  );
+}
+
+function triggerPlanetSizeLimitFeedback(index) {
+  const sizeInput = document.getElementById(`planet-size-${index}`);
+  if (!sizeInput) {
+    return;
+  }
+  sizeInput.classList.remove("input-limit-shake");
+  void sizeInput.offsetWidth;
+  sizeInput.classList.add("input-limit-shake");
+  sizeInput.addEventListener(
+    "animationend",
+    () => {
+      sizeInput.classList.remove("input-limit-shake");
+    },
+    { once: true }
+  );
+}
+
+function triggerPlanetLimitFeedback() {
+  if (!numPlanetsInput) {
+    return;
+  }
+  numPlanetsInput.classList.remove("input-limit-shake");
+  void numPlanetsInput.offsetWidth;
+  numPlanetsInput.classList.add("input-limit-shake");
+  numPlanetsInput.addEventListener(
+    "animationend",
+    () => {
+      numPlanetsInput.classList.remove("input-limit-shake");
+    },
+    { once: true }
+  );
+}
+
 function updatePreviewForTab(panelId) {
   const isGeneralTab = panelId === "general-tab-panel";
   if (isGeneralTab) {
@@ -406,7 +597,7 @@ function updatePreviewForTab(panelId) {
     const nameInput = document.getElementById(`planet-name-${planetIndex}`);
     const sizeInput = document.getElementById(`planet-size-${planetIndex}`);
     const moonsInput = document.getElementById(`planet-moons-${planetIndex}`);
-    const sizeKm = Math.max(1000, Number(sizeInput?.value) || EARTH_DIAMETER_KM);
+    const sizeKm = Math.max(PLANET_SIZE_MIN, Math.min(PLANET_SIZE_MAX, Number(sizeInput?.value) || EARTH_DIAMETER_KM));
     const label = nameInput?.value?.trim() || getDefaultPlanetName(planetIndex);
     starPreviewCaption.textContent = `Previewing ${label}.`;
 
@@ -429,7 +620,7 @@ createSystemForm.addEventListener("submit", (e) => {
   const systemName = document.getElementById("system-name").value.trim();
   const systemCode = document.getElementById("system-code").value.trim();
   const starType = document.getElementById("star-type").value;
-  const numPlanets = Math.max(0, Math.min(12, Number(document.getElementById("num-planets").value) || 0));
+  const numPlanets = Math.max(0, Math.min(PLANET_LIMIT, Number(document.getElementById("num-planets").value) || 0));
   const description = document.getElementById("system-description").value.trim();
   const discoveredBy = document.getElementById("discoverer-name").value.trim();
 
@@ -468,8 +659,8 @@ createSystemForm.addEventListener("submit", (e) => {
       name: (document.getElementById(`planet-name-${i}`)?.value || getDefaultPlanetName(i)).trim() || getDefaultPlanetName(i),
       atmosphere: (document.getElementById(`planet-atmosphere-${i}`)?.value || "Unknown").trim() || "Unknown",
       description: (document.getElementById(`planet-description-${i}`)?.value || "").trim(),
-      sizeKm: Math.max(1000, Number(document.getElementById(`planet-size-${i}`)?.value) || EARTH_DIAMETER_KM),
-      moons: Math.max(0, Number(document.getElementById(`planet-moons-${i}`)?.value) || 0)
+      sizeKm: Math.max(PLANET_SIZE_MIN, Math.min(PLANET_SIZE_MAX, Number(document.getElementById(`planet-size-${i}`)?.value) || EARTH_DIAMETER_KM)),
+      moons: Math.max(0, Math.min(MOON_LIMIT, Number(document.getElementById(`planet-moons-${i}`)?.value) || 0))
     });
   }
 
@@ -554,9 +745,22 @@ if (randomCodeButton) {
 }
 
 numPlanetsInput.addEventListener("input", () => {
-  const normalized = Math.max(0, Math.min(12, Number(numPlanetsInput.value) || 0));
+  const rawValue = Number(numPlanetsInput.value);
+  const attemptedAboveLimit = Number.isFinite(rawValue) && rawValue > PLANET_LIMIT;
+  const normalized = Math.max(0, Math.min(PLANET_LIMIT, rawValue || 0));
   numPlanetsInput.value = String(normalized);
+  setPlanetLimitNoteVisible(normalized >= PLANET_LIMIT);
+  if (attemptedAboveLimit) {
+    triggerPlanetLimitFeedback();
+  }
   renderTabs();
+});
+
+numPlanetsInput.addEventListener("keydown", (event) => {
+  const currentValue = Math.max(0, Math.min(PLANET_LIMIT, Number(numPlanetsInput.value) || 0));
+  if ((event.key === "ArrowUp" || event.key === "PageUp") && currentValue >= PLANET_LIMIT) {
+    triggerPlanetLimitFeedback();
+  }
 });
 
 starTypeSelect.addEventListener("change", updateStarPreview);
