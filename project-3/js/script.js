@@ -86,6 +86,16 @@ const searchCloseButton = searchModal ? searchModal.querySelector(".close") : nu
 const closeButton = modal.querySelector(".close");
 
 let messageTimeout;
+const PLANET_SIZE_MIN_KM = 1000;
+const PLANET_SIZE_MAX_KM = 250000;
+
+function getPlanetSizeRatio(sizeKm) {
+  const safeSize = Math.max(PLANET_SIZE_MIN_KM, Math.min(PLANET_SIZE_MAX_KM, Number(sizeKm) || 12742));
+  const minLog = Math.log(PLANET_SIZE_MIN_KM);
+  const maxLog = Math.log(PLANET_SIZE_MAX_KM);
+  const sizeLog = Math.log(safeSize);
+  return (sizeLog - minLog) / (maxLog - minLog);
+}
 
 function randomizeOrbitPhases(scope = document) {
   const orbitNodes = scope.querySelectorAll(".svg-orbit");
@@ -384,7 +394,8 @@ function renderCustomSystemStage(system) {
     planet.setAttribute("aria-label", planetNameValue);
     planet.title = planetNameValue;
     const sizeKm = Number(detail?.sizeKm) || 12742;
-    const px = Math.max(12, Math.min(42, Math.round((sizeKm / 12742) * 16)));
+    const sizeRatio = getPlanetSizeRatio(sizeKm);
+    const px = Math.round(10 + (sizeRatio * 48));
     planet.style.width = `${px}px`;
     planet.style.height = `${px}px`;
     planet.innerHTML = '<img src="./assets/svg/Planet.svg" alt="" />';

@@ -32,6 +32,14 @@ const moonOrbitCache = {};
 const moonRollTimers = new Map();
 const planetSizeRollTimers = new Map();
 
+function getPlanetSizeRatio(sizeKm) {
+  const safeSize = Math.max(PLANET_SIZE_MIN, Math.min(PLANET_SIZE_MAX, Number(sizeKm) || EARTH_DIAMETER_KM));
+  const minLog = Math.log(PLANET_SIZE_MIN);
+  const maxLog = Math.log(PLANET_SIZE_MAX);
+  const sizeLog = Math.log(safeSize);
+  return (sizeLog - minLog) / (maxLog - minLog);
+}
+
 if (mainTitle) {
   mainTitle.addEventListener("click", () => {
     window.location.href = "./index.html";
@@ -601,7 +609,9 @@ function updatePreviewForTab(panelId) {
     const label = nameInput?.value?.trim() || getDefaultPlanetName(planetIndex);
     starPreviewCaption.textContent = `Previewing ${label}.`;
 
-    planetPreview.style.width = `${Math.max(28, Math.min(72, 40 + ((sizeKm / EARTH_DIAMETER_KM) * 15)))}%`;
+    const sizeRatio = getPlanetSizeRatio(sizeKm);
+    const previewPercent = 22 + (sizeRatio * 70);
+    planetPreview.style.width = `${Math.max(22, Math.min(92, previewPercent))}%`;
     if (starPreviewBox) {
       const expanded = sizeKm >= 20000;
       starPreviewBox.style.minHeight = expanded ? "430px" : "380px";
