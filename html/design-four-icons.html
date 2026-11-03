@@ -11,16 +11,66 @@
   <body>
     <div class="detail-page detail-page--icons-hero">
       <a class="detail-back" href="index.html">← Home</a>
-      <img class="detail-hero-image" src="../assets/jpg/FINAL4IconsSenses.jpg" alt="Four icon grid exploring senses" />
+      <button
+        type="button"
+        class="detail-hero-zoom"
+        id="iconsZoomOpen"
+        aria-label="Enlarge four senses icon grid"
+      >
+        <img
+          class="detail-hero-image"
+          src="../assets/jpg/FINAL4IconsSenses.jpg"
+          alt="Four icon grid exploring senses"
+        />
+      </button>
       <main class="detail-main">
         <h1>Four senses icon grid</h1>
         <p>
-          One deliverable sheet with four icons keyed to the senses: each mark shares weight, corner radius, and palette rules so the set reads as a family instead of four one-off illustrations.
+          For this project, I was tasked with designing a single deliverable collection of four related icons. I chose a theme of the four senses, and created my own distinct visual language for each mark, all of them sharing weight, corner radius, and design rules so the set reads as a family instead of four one-off illustrations.
         </p>
         <p>
-          The hero image is the final print-style layout—vector strokes, flat fills, and the small color story that ties the group together on a single page.
+          The hero image is the final print-style layout—vector strokes, flat fills, and the small format to show how they appear at small scale.
         </p>
       </main>
+
+      <div class="detail-lightbox" id="iconsLightbox" aria-hidden="true" role="dialog" aria-label="Enlarged image">
+        <button type="button" class="detail-lightbox-close" id="iconsLightboxClose" aria-label="Close enlarged image">×</button>
+        <figure>
+          <img src="../assets/jpg/FINAL4IconsSenses.jpg" alt="Four icon grid exploring senses — enlarged" />
+        </figure>
+      </div>
     </div>
+
+    <script>
+      (function () {
+        var openBtn = document.getElementById("iconsZoomOpen");
+        var lightbox = document.getElementById("iconsLightbox");
+        var closeBtn = document.getElementById("iconsLightboxClose");
+        if (!openBtn || !lightbox || !closeBtn) return;
+
+        function open() {
+          lightbox.classList.add("is-open");
+          lightbox.setAttribute("aria-hidden", "false");
+          document.body.style.overflow = "hidden";
+          closeBtn.focus();
+        }
+
+        function close() {
+          lightbox.classList.remove("is-open");
+          lightbox.setAttribute("aria-hidden", "true");
+          document.body.style.overflow = "";
+          openBtn.focus();
+        }
+
+        openBtn.addEventListener("click", open);
+        closeBtn.addEventListener("click", close);
+        lightbox.addEventListener("click", function (event) {
+          if (event.target === lightbox) close();
+        });
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape" && lightbox.classList.contains("is-open")) close();
+        });
+      })();
+    </script>
   </body>
 </html>

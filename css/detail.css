@@ -62,12 +62,103 @@
   margin: 0 auto;
 }
 
+.detail-main--wide {
+  max-width: 72ch;
+}
+
+.detail-main--narrow {
+  max-width: 56ch;
+}
+
 /* Match hero image column to the same measure as .detail-main (e.g. four senses sheet). */
 .detail-page--icons-hero .detail-hero-image {
   width: min(100%, 62ch);
   max-width: 62ch;
   margin-left: auto;
   margin-right: auto;
+}
+
+.detail-hero-zoom {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 1.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.detail-hero-zoom .detail-hero-image {
+  margin-bottom: 0;
+}
+
+.detail-hero-zoom:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.45);
+  outline-offset: 4px;
+}
+
+.detail-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vw, 2.5rem);
+  background: rgba(0, 0, 0, 0.88);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 280ms ease, visibility 0s linear 280ms;
+  cursor: zoom-out;
+}
+
+.detail-lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 280ms ease, visibility 0s step-start;
+}
+
+.detail-lightbox figure {
+  margin: 0;
+  max-width: min(96vw, 1400px);
+  max-height: 90vh;
+  cursor: default;
+}
+
+.detail-lightbox figure img {
+  max-width: 100%;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55);
+  background: #0a0a0a;
+}
+
+.detail-lightbox-close {
+  position: fixed;
+  top: clamp(0.75rem, 3vw, 1.5rem);
+  right: clamp(0.75rem, 3vw, 1.5rem);
+  z-index: 210;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(12, 12, 12, 0.85);
+  color: #fff;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.detail-lightbox-close:hover,
+.detail-lightbox-close:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
 }
 
 .detail-main h1 {
