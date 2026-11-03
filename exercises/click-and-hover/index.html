@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sovereign.OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="landing splash-page">
+
+<div class="crt-screen-wrapper">
+<div class="sci-fi-bg" aria-hidden="true"></div>
+
+<div class="landing-splash" id="landingSplash" role="status" aria-live="polite">
+    <div class="landing-splash-logo-wrap">
+        <img class="landing-splash-logo" src="images/LM%20Logo.svg" alt="LM Logo">
+    </div>
+    <p class="landing-splash-text">Sovereign.OS</p>
+    <div class="landing-splash-cta" id="splashCta" aria-hidden="true">
+        <a href="diagnostic.html" class="landing-splash-cta-btn">Enter ship diagnostic</a>
+    </div>
+</div>
+</div>
+
+<script>
+(function () {
+    var splash = document.getElementById('landingSplash');
+    var cta = document.getElementById('splashCta');
+    if (!splash || !cta) {
+        return;
+    }
+
+    function showCta() {
+        cta.classList.add('is-visible');
+        cta.setAttribute('aria-hidden', 'false');
+    }
+
+    function startSequence() {
+        splash.classList.add('is-logo-revealed');
+        window.setTimeout(function () {
+            splash.classList.add('is-text-visible');
+        }, 1900);
+        window.setTimeout(showCta, 2900);
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        splash.classList.add('is-logo-revealed');
+        splash.classList.add('is-text-visible');
+        showCta();
+    } else {
+        window.setTimeout(startSequence, 80);
+    }
+})();
+</script>
+
+</body>
+</html>

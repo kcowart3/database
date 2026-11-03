@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <style>
+
+            body {
+                margin: 0px;
+                padding: 0px;
+                background-image: radial-gradient(closest-side,
+                    rgb(239, 66, 66),
+                    rgb(243, 179, 60),
+                    rgb(248, 248, 70),
+                    rgb(110, 238, 110),
+                    rgb(97, 207, 237),
+                    rgb(247, 117, 239),
+                    rgb(245, 178, 189)
+                );
+                height: 100vh;
+                background-size: 500% 500%;
+                animation: move 10s alternate infinite; 
+            }
+
+
+            @keyframes move {
+                from {
+                    background-position: 0% 0%;
+                }
+                to {
+                    background-position: 100% 100%;
+                }
+            }
+
+        </style>
+        <title>Animation Practice</title>
+    </head>
+    
+    <body>
+        <p><a href="main.html">Return</a></p>
+    </body>
+</html>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 688.45 954.81" class="connection-svg-root">
+  <defs>
+    <style>
+      .connection-svg-root .cls-1 {
+        stroke: #ff6060;
+        stroke-miterlimit: 10;
+        stroke-width: 6px;
+      }
+      .connection-svg-root .cls-1.body-part {
+        fill: rgba(255, 80, 80, 0.04);
+        pointer-events: fill;
+        cursor: default;
+        transition: stroke 0.15s ease, filter 0.15s ease, fill 0.15s ease;
+      }
+      .connection-svg-root .cls-1.body-part:hover {
+        fill: rgba(255, 160, 160, 0.18);
+        stroke: #ffe0e0;
+        filter: drop-shadow(0 0 8px rgba(255, 80, 80, 0.65));
+      }
+      .connection-svg-root .body-chest-trigger {
+        cursor: pointer;
+        fill: rgba(255, 80, 80, 0.08);
+        stroke: #ff6060;
+        stroke-width: 6px;
+      }
+      .connection-svg-root .body-chest-trigger:hover {
+        fill: rgba(255, 120, 120, 0.2);
+        stroke: #ffc8c8;
+      }
+    </style>
+  </defs>
+  <path class="cls-1 body-part" data-part="head" d="M363.22,163.01h-61.74v-78.11c10.2-2.75,20.4-5.5,30.6-8.25,10.38,1.93,20.76,3.86,31.15,5.78v80.57Z"/>
+  <path class="cls-1 body-part" data-part="abdomen" d="M275.21,340.86h115.41c.7,31.59,1.41,63.17,2.11,94.76h-116.46c-.35-31.59-.71-63.17-1.06-94.76Z"/>
+  <path class="cls-1 body-part" data-part="chest" d="M405.67,204.61c-2.25,40.2-4.51,80.37-6.76,120.57h-130.86c-3.01-40.48-6.02-80.95-9.03-121.43,24.69-8.17,49.37-16.33,74.06-24.51,24.19,8.47,48.4,16.93,72.59,25.38Z"/>
+  <path class="cls-1 body-part" data-part="leg-right-upper" d="M364.11,615.63c12.95.87,25.91,1.74,38.86,2.61,7.66-60.45,15.31-120.91,22.97-181.36-23.54,11.66-47.09,23.32-70.63,34.97,2.93,47.93,5.87,95.85,8.8,143.78Z"/>
+  <path class="cls-1 body-part" data-part="leg-right-lower" d="M386.17,813.38c6.76,1.4,13.53,2.79,20.29,4.19,6.49-62.44,12.98-124.87,19.47-187.31-19.2,1.37-38.4,2.74-57.6,4.11,5.95,59.67,11.9,119.34,17.84,179Z"/>
+  <path class="cls-1 body-part" data-part="arm-right-upper" d="M477.03,476.21c6.9-.43,13.8-.85,20.7-1.28-6.89-46.7-13.77-93.4-20.66-140.1-14.4,2.81-28.79,5.61-43.19,8.42,14.38,44.32,28.76,88.64,43.15,132.95Z"/>
+  <path class="cls-1 body-part" data-part="arm-right-lower" d="M470.24,325.18c-11.83-.4-23.65-.8-35.48-1.2-5.59-29.73-11.19-59.45-16.78-89.18l35.16-15.93c5.7,35.44,11.4,70.87,17.1,106.31Z"/>
+  <path class="cls-1 body-part" data-part="leg-left-upper" d="M308.54,614.36c-12.95.87-25.91,1.74-38.86,2.61-7.66-60.45-15.31-120.91-22.97-181.36,23.54,11.66,47.09,23.32,70.63,34.97-2.93,47.93-5.87,95.85-8.8,143.78Z"/>
+  <path class="cls-1 body-part" data-part="leg-left-lower" d="M286.47,812.12c-6.76,1.4-13.53,2.79-20.29,4.19-6.49-62.44-12.98-124.87-19.47-187.31,19.2,1.37,38.4,2.74,57.6,4.11-5.95,59.67-11.9,119.34-17.84,179Z"/>
+  <path class="cls-1 body-part" data-part="arm-left-upper" d="M187.66,472.77c-6.9-.43-13.8-.85-20.7-1.28,6.89-46.7,13.77-93.4,20.66-140.1,14.4,2.81,28.79,5.61,43.19,8.42-14.38,44.32-28.76,88.64-43.15,132.95Z"/>
+  <path class="cls-1 body-part" data-part="arm-left-lower" d="M194.45,321.74c11.83-.4,23.65-.8,35.48-1.2,5.59-29.73,11.19-59.45,16.78-89.18-11.72-5.31-23.44-10.62-35.16-15.93-5.7,35.44-11.4,70.87-17.1,106.31Z"/>
+  <rect class="cls-1 body-chest-trigger" id="body-chest-node" x="314.85" y="231.4" width="34.99" height="34.99"/>
+</svg>

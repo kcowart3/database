@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cannons - Sovereign.OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="../script.js"></script>
+</head>
+<body class="landing sub-page">
+<div class="crt-screen-wrapper">
+    <div class="sci-fi-bg" aria-hidden="true"></div>
+    <div id="container" class="landing-wrap">
+        <div class="diagnostic-frame diagnostic-frame--wide">
+            <span class="corner-bracket corner-tl" aria-hidden="true"></span>
+            <span class="corner-bracket corner-tr" aria-hidden="true"></span>
+            <span class="corner-bracket corner-bl" aria-hidden="true"></span>
+            <span class="corner-bracket corner-br" aria-hidden="true"></span>
+            <header class="diag-header">
+                <h1 class="diag-title">CANNONS</h1>
+                <p class="diag-sub">Weapon systems // STANDBY</p>
+            </header>
+            <div class="diag-divider"></div>
+            <a class="diag-link diag-back" href="../diagnostic.html">
+                <span class="diag-link-main">
+                    <span class="chev">&lt;</span>
+                    <span class="diag-label">RETURN TO DIAGNOSTIC</span>
+                </span>
+            </a>
+            <div class="diag-divider thin"></div>
+            <div class="cannons-svg-wrap">
+                <svg id="cannonsSvg" class="cannons-svg-inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1156.71 1255.9" role="img" aria-label="Dual cannons firing system">
+                    <g class="cannon-group" data-cannon="right">
+                        <path class="cls-1" d="M770.56,435.95c-11.91-18.23-23.82-36.46-35.72-54.68-.26-22.65-.52-45.29-.79-67.94,20.91-14.55,41.81-29.1,62.72-43.64,7.98,29.28,15.95,58.56,23.93,87.84-2.24,14.22-4.48,28.43-6.72,42.65-14.47,11.93-28.94,23.85-43.41,35.78Z"/>
+                        <path class="cls-1" d="M715.18,1026.87c-14.47-7.18-28.94-14.37-43.41-21.55,4.81-94.74,9.62-189.49,14.42-284.23,25.22,3.21,50.45,6.41,75.67,9.62-15.56,98.72-31.12,197.44-46.69,296.16Z"/>
+                        <path class="cls-1" d="M761.87,730.71c-25.22-3.21-50.45-6.41-75.67-9.62-9.76-70.06-19.52-140.13-29.28-210.19,5.56-80.41,11.12-160.81,16.67-241.22,41.39-2.11,82.78-4.22,124.18-6.34,14.36,51.28,28.73,102.56,43.09,153.83-8.3,50.15-19.18,103.7-33.44,160.05-13.89,54.88-29.38,106.12-45.54,153.49Z"/>
+                        <line class="cls-1" x1="771.23" y1="431.67" x2="698.43" y2="1018.56"/>
+                        <line class="cls-1" x1="711.01" y1="917.15" x2="676.42" y2="913.69"/>
+                    </g>
+                    <g class="cannon-group" data-cannon="left">
+                        <path class="cls-1" d="M386.15,435.95c11.91-18.23,23.82-36.46,35.72-54.68.26-22.65.52-45.29.79-67.94-20.91-14.55-41.81-29.1-62.72-43.64-7.98,29.28-15.95,58.56-23.93,87.84,2.24,14.22,4.48,28.43,6.72,42.65,14.47,11.93,28.94,23.85,43.41,35.78Z"/>
+                        <path class="cls-1" d="M441.53,1026.87c14.47-7.18,28.94-14.37,43.41-21.55-4.81-94.74-9.62-189.49-14.42-284.23-25.22,3.21-50.45,6.41-75.67,9.62,15.56,98.72,31.12,197.44,46.69,296.16Z"/>
+                        <path class="cls-1" d="M394.84,730.71c25.22-3.21,50.45-6.41,75.67-9.62,9.76-70.06,19.52-140.13,29.28-210.19-5.56-80.41-11.12-160.81-16.67-241.22-41.39-2.11-82.78-4.22-124.18-6.34-14.36,51.28-28.73,102.56-43.09,153.83,8.3,50.15,19.18,103.7,33.44,160.05,13.89,54.88,29.38,106.12,45.54,153.49Z"/>
+                        <line class="cls-1" x1="385.47" y1="431.67" x2="458.27" y2="1018.56"/>
+                        <line class="cls-1" x1="445.69" y1="917.15" x2="480.29" y2="913.69"/>
+                    </g>
+                </svg>
+            </div>
+            <p class="cannons-status" id="cannonsStatus">Select a cannon to arm.</p>
+            <button type="button" class="cannons-fire-btn" id="cannonsFireBtn" hidden>FIRE SALVO</button>
+        </div>
+    </div>
+</div>
+<script>
+(function () {
+    var svg = document.getElementById("cannonsSvg");
+    var groups = Array.prototype.slice.call(svg.querySelectorAll(".cannon-group"));
+    var statusEl = document.getElementById("cannonsStatus");
+    var fireBtn = document.getElementById("cannonsFireBtn");
+    var screen = document.querySelector(".crt-screen-wrapper");
+    function triggerScreenShake() {
+        if (!screen) return;
+        screen.classList.remove("cannons-screen-shake");
+        void screen.offsetWidth;
+        screen.classList.add("cannons-screen-shake");
+        setTimeout(function () { screen.classList.remove("cannons-screen-shake"); }, 560);
+    }
+    function setStatus(text) { statusEl.textContent = text; }
+    function armedCount() {
+        return groups.filter(function (g) { return g.classList.contains("is-armed"); }).length;
+    }
+    function refreshFireState() {
+        var ready = armedCount() === groups.length;
+        fireBtn.hidden = !ready;
+        if (ready) setStatus("Both cannons armed. Salvo ready.");
+        else if (armedCount() === 1) setStatus("One cannon armed. Arm the other cannon.");
+        else setStatus("Select a cannon to arm.");
+    }
+    groups.forEach(function (group) {
+        var box = group.getBBox();
+        var hit = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        hit.setAttribute("x", String(box.x - 22));
+        hit.setAttribute("y", String(box.y - 22));
+        hit.setAttribute("width", String(box.width + 44));
+        hit.setAttribute("height", String(box.height + 44));
+        hit.setAttribute("class", "cannon-hitbox");
+        group.insertBefore(hit, group.firstChild);
+        group.addEventListener("click", function () {
+            if (group.classList.contains("is-firing")) return;
+            group.classList.toggle("is-armed");
+            refreshFireState();
+        });
+    });
+    fireBtn.addEventListener("click", function () {
+        if (armedCount() !== groups.length) return;
+        fireBtn.hidden = true;
+        setStatus("Salvo firing...");
+        triggerScreenShake();
+        groups.forEach(function (g, idx) {
+            setTimeout(function () {
+                g.classList.add("is-firing");
+                setTimeout(function () { g.classList.remove("is-firing"); }, 360);
+            }, idx * 220);
+        });
+        setTimeout(function () {
+            groups.forEach(function (g) { g.classList.remove("is-armed"); });
+            setStatus("Salvo complete. Re-arm to fire again.");
+        }, 900);
+    });
+})();
+</script>
+</body>
+</html>

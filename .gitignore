@@ -1,0 +1,9 @@
+# macOS / editor noise (these were bloating commits and are not part of the site)
+.DS_Store
+**/._*
+._*
+
+# Optional: local env (keep if you add secrets later)
+.env
+.env.local
+.vercel

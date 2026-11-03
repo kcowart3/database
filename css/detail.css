@@ -1,0 +1,230 @@
+.detail-page {
+  min-height: 100vh;
+  padding: 72px clamp(1rem, 4vw, 2.5rem) clamp(2.5rem, 6vw, 4rem);
+}
+
+.detail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.82rem;
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(245, 245, 245, 0.72);
+  text-decoration: none;
+}
+
+.detail-back:hover,
+.detail-back:focus-visible {
+  color: var(--text);
+}
+
+.detail-hero-video {
+  display: block;
+  width: auto;
+  max-width: min(100%, 960px);
+  max-height: min(88vh, 960px);
+  height: auto;
+  margin: 0 auto 1.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  background: #0a0a0a;
+}
+
+.detail-hero-image {
+  display: block;
+  width: auto;
+  max-width: min(100%, 960px);
+  max-height: min(88vh, 960px);
+  height: auto;
+  margin: 0 auto 1.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  background: #0a0a0a;
+}
+
+.detail-hero-gif {
+  display: block;
+  width: auto;
+  max-width: min(100%, 960px);
+  max-height: min(88vh, 960px);
+  height: auto;
+  margin: 0 auto 1.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  background: #0a0a0a;
+}
+
+.detail-main {
+  max-width: 62ch;
+  margin: 0 auto;
+}
+
+/* Match hero image column to the same measure as .detail-main (e.g. four senses sheet). */
+.detail-page--icons-hero .detail-hero-image {
+  width: min(100%, 62ch);
+  max-width: 62ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.detail-main h1 {
+  font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 0.75rem;
+}
+
+.detail-main p {
+  color: var(--muted);
+  line-height: 1.65;
+  margin: 0 0 1rem;
+}
+
+.detail-subsection-title {
+  margin: 2.25rem 0 0.65rem;
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.social-piece-title {
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin: 0 0 0.75rem;
+  color: var(--text);
+}
+
+.detail-cta {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.detail-cta a {
+  color: var(--text);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+.exercise-list {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.25rem);
+  margin-top: 2rem;
+}
+
+.exercise-card {
+  display: grid;
+  grid-template-columns: minmax(0, 140px) minmax(0, 1fr);
+  gap: 1rem 1.25rem;
+  align-items: start;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.exercise-card:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.exercise-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.exercise-card h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.exercise-card p {
+  margin: 0 0 0.65rem;
+  font-size: 0.95rem;
+}
+
+.exercise-card .exercise-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.exercise-card .exercise-links a {
+  color: var(--text);
+  font-size: 0.88rem;
+}
+
+.social-piece {
+  padding: 2rem 0 2.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  scroll-margin-top: 88px;
+}
+
+.social-piece:last-of-type {
+  border-bottom: 0;
+}
+
+.social-piece img {
+  width: min(100%, 720px);
+  display: block;
+  margin: 0 auto 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.16);
+}
+
+.album-piece {
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  scroll-margin-top: 88px;
+}
+
+.album-piece img {
+  width: min(100%, 640px);
+  display: block;
+  margin: 0 auto 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.16);
+}
+
+.exercise-dir-list {
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.exercise-dir-list li {
+  margin: 0.4rem 0;
+}
+
+.exercise-dir-list a {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.exercise-dir-list a:hover,
+.exercise-dir-list a:focus-visible {
+  color: #fff;
+}
+
+.detail-muted {
+  margin-top: 1.5rem;
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+@media (max-width: 560px) {
+  .exercise-card {
+    grid-template-columns: 1fr;
+  }
+}

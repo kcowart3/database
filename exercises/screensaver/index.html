@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Screensaver</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+      }
+      .stage {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: #000;
+      }
+      #snake-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage" aria-hidden="true">
+      <canvas id="snake-canvas"></canvas>
+    </div>
+    <script>
+      (function () {
+        const canvas = document.getElementById("snake-canvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d", { alpha: true });
+        if (!ctx) return;
+
+        const DPR_CAP = 2;
+        const PI2 = Math.PI * 2;
+        const SNAKE_VERTEBRA_COUNT = 56;
+        const VERTEBRA_SPACING = 13;
+
+        const ORBIT_CAPTURE_DISTANCE = 74;
+        /** Start curving into orbit before full capture to avoid jitter near the cursor. */
+        const ORBIT_BLEND_DISTANCE = 170;
+        /** Leave orbit when the cursor is moving faster than this (px/s). */
+        const ORBIT_BREAK_CURSOR_SPEED = 400;
+        const ORBIT_RADIUS = 52;
+        const ORBIT_RADIANS_PER_SEC = 1.85;
+
+        let width = 0;
+        let height = 0;
+        let dpr = 1;
+        let lastTime = performance.now();
+        let targetKnown = false;
+
+        const cursor = {
+          x: 0,
+          y: 0,
+          lastSeen: 0,
+          vx: 0,
+          vy: 0,
+          prevX: 0,
+          prevY: 0,
+          prevT: 0,
+        };
+        const snake = {
+          x: 0,
+          y: 0,
+          vx: 0,
+          vy: 0,
+          heading: 0,
+          slitherPhase: 0,
+          speedNorm: 0,
+          idleSeed: Math.random() * PI2,
+          vertebrae: [],
+          mode: "chase",
+          orbitAngle: 0,
+          orbitRadius: ORBIT_RADIUS,
+        };
+
+        function clamp(v, a, b) {
+          return Math.min(b, Math.max(a, v));
+        }
+        function lerp(a, b, t) {
+          return a + (b - a) * t;
+        }
+
+        function resize() {
+          dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
+          width = Math.max(1, window.innerWidth);
+          height = Math.max(1, window.innerHeight);
+          canvas.width = Math.floor(width * dpr);
+          canvas.height = Math.floor(height * dpr);
+          canvas.style.width = `${width}px`;
+          canvas.style.height = `${height}px`;
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+          if (!targetKnown) {
+            cursor.x = width * 0.5;
+            cursor.y = height * 0.5;
+            cursor.prevX = cursor.x;
+            cursor.prevY = cursor.y;
+            cursor.prevT = performance.now();
+            cursor.vx = 0;
+            cursor.vy = 0;
+            snake.x = cursor.x;
+            snake.y = cursor.y;
+            targetKnown = true;
+          }
+          if (!snake.vertebrae.length) initSnakeBody();
+        }
+
+        function initSnakeBody() {
+          for (let i = 0; i < SNAKE_VERTEBRA_COUNT; i += 1) {
+            snake.vertebrae.push({
+              x: snake.x - i * VERTEBRA_SPACING,
+              y: snake.y,
+              px: snake.x - i * VERTEBRA_SPACING,
+              py: snake.y,
+            });
+          }
+        }
+
+        function idlePatrolPoint(nowSeconds) {
+          const angle = snake.idleSeed + nowSeconds * 0.28;
+          return {
+            x: width * 0.5 + Math.cos(angle * 1.12) * width * 0.24,
+            y: height * 0.5 + Math.sin(angle * 0.86) * height * 0.19,
+          };
+        }
+
+        function pullVertebraTowardLeader(follower, leader, distance) {
+          const dx = follower.x - leader.x;
+          const dy = follower.y - leader.y;
+          const len = Math.hypot(dx, dy) || 0.0001;
+          const scale = distance / len;
+          follower.x = leader.x + dx * scale;
+          follower.y = leader.y + dy * scale;
+        }
+
+        function spineNormalAtVertebra(i) {
+          const a = snake.vertebrae[Math.max(0, i - 1)];
+          const b = snake.vertebrae[Math.min(snake.vertebrae.length - 1, i + 1)];
+          const dx = b.x - a.x;
+          const dy = b.y - a.y;
+          const len = Math.hypot(dx, dy) || 1;
+          return { x: -dy / len, y: dx / len };
+        }
+
+        function updateSnake(dt, nowSeconds) {
+          const staleCursor = performance.now() - cursor.lastSeen > 2600;
+          const chaseTarget = staleCursor ? idlePatrolPoint(nowSeconds) : cursor;
+
+          if (staleCursor && snake.mode === "orbit") {
+            snake.mode = "chase";
+          }
+
+          let orbitActive = snake.mode === "orbit" && !staleCursor;
+          if (orbitActive) {
+            const cursorSpeed = Math.hypot(cursor.vx, cursor.vy);
+            const cursorSettled = performance.now() - cursor.lastSeen > 48;
+            if (cursorSettled) {
+              cursor.vx = 0;
+              cursor.vy = 0;
+            }
+            if (cursorSpeed > ORBIT_BREAK_CURSOR_SPEED) {
+              snake.mode = "chase";
+              orbitActive = false;
+            }
+          }
+
+          if (!orbitActive) {
+            const toX = chaseTarget.x - snake.x;
+            const toY = chaseTarget.y - snake.y;
+            const dist = Math.hypot(toX, toY);
+
+            if (!staleCursor && snake.mode === "chase" && dist < ORBIT_CAPTURE_DISTANCE) {
+              snake.mode = "orbit";
+              snake.orbitAngle = Math.atan2(snake.y - cursor.y, snake.x - cursor.x);
+              snake.orbitRadius = Math.hypot(snake.x - cursor.x, snake.y - cursor.y);
+              orbitActive = true;
+            }
+          }
+
+          if (orbitActive) {
+            snake.orbitAngle += dt * ORBIT_RADIANS_PER_SEC;
+            snake.orbitRadius = lerp(
+              snake.orbitRadius,
+              ORBIT_RADIUS,
+              1 - Math.exp(-dt * 6.5)
+            );
+            snake.x = cursor.x + Math.cos(snake.orbitAngle) * snake.orbitRadius;
+            snake.y = cursor.y + Math.sin(snake.orbitAngle) * snake.orbitRadius;
+            snake.heading = snake.orbitAngle + Math.PI * 0.5;
+            snake.vx =
+              Math.cos(snake.heading) * snake.orbitRadius * ORBIT_RADIANS_PER_SEC;
+            snake.vy =
+              Math.sin(snake.heading) * snake.orbitRadius * ORBIT_RADIANS_PER_SEC;
+            snake.speedNorm = 1;
+            snake.slitherPhase += dt * (0.38 + snake.speedNorm * 0.55);
+          } else {
+            const toX = chaseTarget.x - snake.x;
+            const toY = chaseTarget.y - snake.y;
+            const dist = Math.hypot(toX, toY);
+
+            const desiredHeading = dist > 0.8 ? Math.atan2(toY, toX) : snake.heading;
+            let dh = desiredHeading - snake.heading;
+            while (dh > Math.PI) dh -= PI2;
+            while (dh < -Math.PI) dh += PI2;
+            snake.heading += dh * clamp(dt * 3.8, 0, 0.22);
+
+            const forwardX = Math.cos(snake.heading);
+            const forwardY = Math.sin(snake.heading);
+
+            const maxSpeed = 230;
+            const targetSpeed = dist > 8 ? Math.min(maxSpeed, 48 + dist * 0.38) : 0;
+            let dirX = dist > 0.6 ? toX / dist : forwardX;
+            let dirY = dist > 0.6 ? toY / dist : forwardY;
+
+            if (!staleCursor) {
+              const blendDenom = Math.max(
+                1,
+                ORBIT_BLEND_DISTANCE - ORBIT_CAPTURE_DISTANCE
+              );
+              const orbitBlend = clamp(
+                (ORBIT_BLEND_DISTANCE - dist) / blendDenom,
+                0,
+                1
+              );
+              if (orbitBlend > 0) {
+                const tangentX = -dirY;
+                const tangentY = dirX;
+                // Bias heading tangentially as we approach the cursor for a gradual orbit handoff.
+                dirX = lerp(dirX, tangentX, orbitBlend * 0.7);
+                dirY = lerp(dirY, tangentY, orbitBlend * 0.7);
+                const dirLen = Math.hypot(dirX, dirY) || 1;
+                dirX /= dirLen;
+                dirY /= dirLen;
+              }
+            }
+
+            const wantVx = dirX * targetSpeed;
+            const wantVy = dirY * targetSpeed;
+            const follow = 1 - Math.exp(-dt * 2.2);
+            snake.vx = lerp(snake.vx, wantVx, follow);
+            snake.vy = lerp(snake.vy, wantVy, follow);
+
+            snake.x += snake.vx * dt;
+            snake.y += snake.vy * dt;
+            snake.x = clamp(snake.x, 32, width - 32);
+            snake.y = clamp(snake.y, 32, height - 32);
+
+            const speed = Math.hypot(snake.vx, snake.vy);
+            snake.speedNorm = clamp(speed / maxSpeed, 0, 1);
+            snake.slitherPhase += dt * (0.32 + snake.speedNorm * 0.62);
+          }
+
+          const headVertebra = snake.vertebrae[0];
+          headVertebra.px = headVertebra.x;
+          headVertebra.py = headVertebra.y;
+          headVertebra.x = snake.x;
+          headVertebra.y = snake.y;
+          for (let i = 1; i < snake.vertebrae.length; i += 1) {
+            const prev = snake.vertebrae[i - 1];
+            const v = snake.vertebrae[i];
+            v.px = v.x;
+            v.py = v.y;
+            pullVertebraTowardLeader(v, prev, VERTEBRA_SPACING);
+          }
+        }
+
+        /** Lateral sine offset perpendicular to the spine: wide, slow, gentle waves. */
+        function slitheredVertebraPosition(i) {
+          const v = snake.vertebrae[i];
+          if (i === 0) return { x: v.x, y: v.y };
+          const prev = snake.vertebrae[i - 1];
+          let nx = prev.y - v.y;
+          let ny = v.x - prev.x;
+          const nLen = Math.hypot(nx, ny) || 1;
+          nx /= nLen;
+          ny /= nLen;
+          const t = 1 - i / SNAKE_VERTEBRA_COUNT;
+          const envelope = Math.pow(t, 1.25);
+          const amp = envelope * (3.4 + snake.speedNorm * 3.8);
+          const lateral =
+            Math.sin(snake.slitherPhase * PI2 * 0.38 - i * 0.34) * amp;
+          return { x: v.x + nx * lateral, y: v.y + ny * lateral };
+        }
+
+        function drawBackground() {
+          ctx.fillStyle = "#000000";
+          ctx.fillRect(0, 0, width, height);
+        }
+
+        function drawSnake(nowSeconds) {
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
+
+          ctx.strokeStyle = "rgba(226, 226, 226, 0.9)";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          for (let i = 0; i < snake.vertebrae.length; i += 1) {
+            const p = slitheredVertebraPosition(i);
+            if (i === 0) ctx.moveTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
+          }
+          ctx.stroke();
+
+          for (let i = 2; i < snake.vertebrae.length - 2; i += 1) {
+            const p = slitheredVertebraPosition(i);
+            const n = spineNormalAtVertebra(i);
+            const t = 1 - i / snake.vertebrae.length;
+            const ribLen = 4 + t * 19;
+            const alpha = 0.2 + t * 0.65;
+            ctx.strokeStyle = `rgba(232, 232, 232, ${alpha})`;
+            ctx.lineWidth = 1.3;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p.x + n.x * ribLen, p.y + n.y * ribLen);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p.x - n.x * ribLen, p.y - n.y * ribLen);
+            ctx.stroke();
+          }
+
+          const head = slitheredVertebraPosition(0);
+          const hx = Math.cos(snake.heading);
+          const hy = Math.sin(snake.heading);
+          ctx.strokeStyle = "rgba(242, 242, 242, 0.9)";
+          ctx.lineWidth = 1.9;
+          ctx.beginPath();
+          ctx.arc(head.x, head.y, 4.5, 0, PI2);
+          ctx.stroke();
+          const glow = 0.25 + Math.sin(nowSeconds * 2.2) * 0.08;
+          ctx.fillStyle = `rgba(240, 240, 240, ${glow})`;
+          ctx.beginPath();
+          ctx.arc(head.x - hx * 3, head.y - hy * 3, 1.8, 0, PI2);
+          ctx.fill();
+        }
+
+        function frame(now) {
+          const dt = Math.min(0.05, (now - lastTime) / 1000 || 0.016);
+          lastTime = now;
+          const nowSeconds = now / 1000;
+          updateSnake(dt, nowSeconds);
+          drawBackground();
+          drawSnake(nowSeconds);
+          requestAnimationFrame(frame);
+        }
+
+        function updateCursor(x, y) {
+          const now = performance.now();
+          if (cursor.prevT > 0) {
+            const dtMs = now - cursor.prevT;
+            if (dtMs > 0.5 && dtMs < 180) {
+              const dt = dtMs / 1000;
+              cursor.vx = (x - cursor.prevX) / dt;
+              cursor.vy = (y - cursor.prevY) / dt;
+            }
+          }
+          cursor.prevX = x;
+          cursor.prevY = y;
+          cursor.prevT = now;
+          cursor.x = x;
+          cursor.y = y;
+          cursor.lastSeen = now;
+        }
+
+        window.addEventListener("resize", resize, { passive: true });
+        window.addEventListener("mousemove", (e) => updateCursor(e.clientX, e.clientY), { passive: true });
+        window.addEventListener(
+          "touchstart",
+          (e) => {
+            if (e.touches[0]) updateCursor(e.touches[0].clientX, e.touches[0].clientY);
+          },
+          { passive: true }
+        );
+        window.addEventListener(
+          "touchmove",
+          (e) => {
+            if (e.touches[0]) updateCursor(e.touches[0].clientX, e.touches[0].clientY);
+          },
+          { passive: true }
+        );
+
+        resize();
+        requestAnimationFrame(frame);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+# Keep deploy uploads small; site does not need these at runtime
+.git
+**/.DS_Store
+**/._*
+._*

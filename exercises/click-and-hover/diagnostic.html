@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ship diagnostic — Sovereign.OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="landing">
+
+<div class="crt-screen-wrapper">
+<div class="sci-fi-bg" aria-hidden="true"></div>
+
+<div id="container" class="landing-wrap is-visible">
+    <div class="diagnostic-frame">
+        <span class="corner-bracket corner-tl" aria-hidden="true"></span>
+        <span class="corner-bracket corner-tr" aria-hidden="true"></span>
+        <span class="corner-bracket corner-bl" aria-hidden="true"></span>
+        <span class="corner-bracket corner-br" aria-hidden="true"></span>
+
+        <header class="diag-header">
+            <h1 class="diag-title">SHIP DIAGNOSTIC</h1>
+            <p class="diag-sub">Pilot Access // AUTHORIZED</p>
+        </header>
+
+        <div class="diag-divider"></div>
+
+        <div class="diag-body">
+            <div class="diag-bar" aria-hidden="true">
+                <div class="diag-bar-fill"></div>
+            </div>
+            <nav class="diag-rows" aria-label="Sub pages">
+                <div class="diag-section">
+                    <a class="diag-link" href="sub-pages/energy.html">
+                        <span class="diag-link-main">
+                            <span class="chev">&gt;</span>
+                            <span class="diag-label">ENERGY</span>
+                        </span>
+                        <span class="diag-status diag-blink diag-blink-pct" id="diagEnergyPct">7%</span>
+                    </a>
+                    <a class="diag-link" href="sub-pages/connection.html">
+                        <span class="diag-link-main">
+                            <span class="chev">&gt;</span>
+                            <span class="diag-label">CONNECTION</span>
+                        </span>
+                        <span class="diag-status diag-blink">Unstable</span>
+                    </a>
+                </div>
+                <div class="diag-divider thin"></div>
+                <a class="diag-link" href="sub-pages/shields.html">
+                    <span class="diag-link-main">
+                        <span class="chev">&gt;</span>
+                        <span class="diag-label">SHIELDS</span>
+                    </span>
+                </a>
+                <a class="diag-link" href="sub-pages/damaged.html">
+                    <span class="diag-link-main">
+                        <span class="chev">&gt;</span>
+                        <span class="diag-label">COMMUNICATIONS</span>
+                    </span>
+                    <span class="diag-status diag-blink">DAMAGED</span>
+                </a>
+                <a class="diag-link" href="sub-pages/damaged.html">
+                    <span class="diag-link-main">
+                        <span class="chev">&gt;</span>
+                        <span class="diag-label">ENGINE</span>
+                    </span>
+                    <span class="diag-status diag-blink">DAMAGED</span>
+                </a>
+                <a class="diag-link" href="sub-pages/cannons.html">
+                    <span class="diag-link-main">
+                        <span class="chev">&gt;</span>
+                        <span class="diag-label">CANNONS</span>
+                    </span>
+                </a>
+                <div class="diag-divider thin"></div>
+                <a class="diag-link" href="sub-pages/journal.html">
+                    <span class="diag-link-main">
+                        <span class="chev">&gt;</span>
+                        <span class="diag-label">JOURNAL</span>
+                    </span>
+                </a>
+            </nav>
+        </div>
+
+        <footer class="diag-footer">
+            <a href="index.html" class="diag-brand-link">Sovereign.OS</a>
+        </footer>
+    </div>
+</div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal - Sovereign.OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="../script.js"></script>
+</head>
+<body class="landing sub-page">
+<div class="crt-screen-wrapper">
+    <div class="sci-fi-bg" aria-hidden="true"></div>
+    <div id="container" class="landing-wrap">
+        <div class="diagnostic-frame diagnostic-frame--wide">
+            <span class="corner-bracket corner-tl" aria-hidden="true"></span>
+            <span class="corner-bracket corner-tr" aria-hidden="true"></span>
+            <span class="corner-bracket corner-bl" aria-hidden="true"></span>
+            <span class="corner-bracket corner-br" aria-hidden="true"></span>
+            <header class="diag-header">
+                <h1 class="diag-title">JOURNAL</h1>
+                <p class="diag-sub">Pilot Log // ARCHIVE</p>
+            </header>
+            <div class="diag-divider"></div>
+            <a class="diag-link diag-back" href="../diagnostic.html">
+                <span class="diag-link-main">
+                    <span class="chev">&lt;</span>
+                    <span class="diag-label">RETURN TO DIAGNOSTIC</span>
+                </span>
+            </a>
+            <div class="diag-divider thin"></div>
+            <section class="journal-log" aria-live="polite">
+                <h2 class="journal-title">DATE EXPUNGED // Entry 512</h2>
+                <p class="journal-entry" id="journalEntry1"></p>
+                <p class="journal-entry" id="journalEntry2"></p>
+                <p class="journal-signature" id="journalSignature"></p>
+            </section>
+        </div>
+    </div>
+</div>
+<script>
+(function () {
+    var lines = [
+        "I've managaed to survive the battle. My ship has suffered significant damage, but I've managed to keep it running. My head is ringing like a tuning fork. I think the damage I endured harmed my neural connection. I don't know how much longer I will be able to survive for.",
+        " If this log survives... I don't know what to say. Glory to the Queen. Glory to the Archidian Empire.",
+        "Pilot R. Vivian"
+    ];
+    var targets = [
+        document.getElementById("journalEntry1"),
+        document.getElementById("journalEntry2"),
+        document.getElementById("journalSignature")
+    ];
+    var charDelay = 14;
+    var lineDelay = 110;
+    function typeLine(el, text, done) {
+        var i = 0;
+        function tick() {
+            if (i <= text.length) {
+                el.textContent = text.slice(0, i);
+                i++;
+                setTimeout(tick, charDelay);
+            } else {
+                done();
+            }
+        }
+        tick();
+    }
+    function typeAll(idx) {
+        if (idx >= lines.length) return;
+        typeLine(targets[idx], lines[idx], function () {
+            setTimeout(function () { typeAll(idx + 1); }, lineDelay);
+        });
+    }
+    typeAll(0);
+})();
+</script>
+</body>
+</html>

@@ -8,7 +8,7 @@ b, .word {
 
 body {
     background-color: black;
-    background-image: url(../../assets/images/darkforest.jpg);
+    background-image: url(../../assets/jpg/darkforest.jpg);
     background-size: 100vw auto;
     background-attachment: fixed;
     background-position: center top;

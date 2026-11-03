@@ -1,0 +1,282 @@
+:root {
+  --bg: #070707;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+}
+
+body {
+  overflow: hidden;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+.splash-page {
+  min-height: 100vh;
+  position: relative;
+  background: radial-gradient(circle at 50% 42%, #161616 0%, var(--bg) 60%);
+}
+
+.splash-page::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background: radial-gradient(circle at 42% 38%, rgba(255, 255, 255, 0.08), transparent 45%),
+    radial-gradient(circle at 65% 65%, rgba(255, 255, 255, 0.05), transparent 48%);
+  filter: blur(36px);
+  animation: ambientPulse 12s ease-in-out infinite;
+}
+
+.splash-page::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.06) 38%, transparent 62%);
+  transform: scale(0.72);
+}
+
+.splash-stage {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.1rem, 3vh, 2rem);
+  padding-inline: clamp(1rem, 4vw, 2rem);
+  padding-bottom: clamp(2rem, 6vh, 4rem);
+  padding-top: clamp(1rem, 4vh, 2.5rem);
+  opacity: 1;
+  transition: opacity 900ms ease;
+}
+
+.logo-button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  width: min(60vw, 470px);
+  min-width: 210px;
+  padding: clamp(0.6rem, 1.8vw, 1rem);
+  flex-shrink: 0;
+  transform: scale(1);
+  opacity: 1;
+  transform-origin: 50% 40%;
+  transition: transform 1100ms cubic-bezier(0.33, 1, 0.36, 1), opacity 1100ms ease;
+}
+
+.logo-button.playing {
+  transform: scale(1.14);
+}
+
+.logo-svg {
+  width: 100%;
+  display: block;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.18));
+  transition: filter 900ms ease;
+}
+
+.logo-button.playing .logo-svg {
+  filter: drop-shadow(0 0 28px rgba(255, 255, 255, 0.45)) drop-shadow(0 0 48px rgba(255, 255, 255, 0.18));
+}
+
+.logo-fill {
+  fill: url(#logoGradient);
+  opacity: 0;
+  transition: opacity 460ms ease;
+}
+
+.logo-outline {
+  fill: transparent;
+  stroke: url(#logoGradient);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+
+.logo-button.playing .logo-fill {
+  opacity: 1;
+}
+
+.splash-page.pulse::after {
+  animation: screenPulse 920ms ease-out forwards;
+}
+
+.splash-page.exit .logo-button.playing {
+  transform: scale(1.28);
+  opacity: 0;
+  transition: transform 1200ms cubic-bezier(0.33, 1, 0.45, 1), opacity 1000ms ease 100ms;
+}
+
+.splash-gate {
+  max-width: 38rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(12px);
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s ease-out, transform 0.75s ease-out, visibility 0ms 0.5s;
+}
+
+.splash-page.show-gate .splash-gate {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.45s ease-out, transform 0.75s ease-out, visibility 0ms 0ms;
+}
+
+.splash-gate__copy,
+.splash-gate__copy--secondary {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 1.05s ease-out, transform 1.05s ease-out;
+}
+
+.splash-page.show-gate .splash-gate__copy {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.16s;
+}
+
+.splash-page.show-gate .splash-gate__copy--secondary {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.34s;
+}
+
+.splash-page.show-gate .splash-gate__enter {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.52s;
+}
+
+.splash-gate__copy {
+  margin: 0 0 0.85rem;
+  font-size: clamp(0.92rem, 1.9vw, 1.05rem);
+  line-height: 1.55;
+  color: rgba(238, 238, 238, 0.88);
+  font-weight: 400;
+}
+
+.splash-gate__copy--secondary {
+  margin-bottom: 1.35rem;
+  font-size: clamp(0.86rem, 1.65vw, 0.98rem);
+  color: rgba(210, 210, 210, 0.72);
+}
+
+.splash-gate__enter {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(252, 252, 252, 0.96);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.6rem;
+  cursor: pointer;
+  align-self: flex-start;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 1.05s ease-out, transform 1.05s ease-out, background 200ms ease, border-color 200ms ease;
+}
+
+.splash-gate__enter:hover,
+.splash-gate__enter:focus-visible {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.splash-gate__enter:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.55);
+  outline-offset: 3px;
+}
+
+.splash-page.exit .splash-gate {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 900ms ease, transform 900ms ease;
+}
+
+.splash-page.exit .splash-stage {
+  opacity: 0;
+}
+
+@keyframes ambientPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes screenPulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+  35% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-page::before {
+    animation: none;
+  }
+
+  .splash-page.pulse::after {
+    animation: none;
+    opacity: 0.22;
+    transform: scale(1);
+  }
+
+  .logo-svg,
+  .logo-button,
+  .splash-gate {
+    transition: none;
+  }
+
+  .splash-page.show-gate .splash-gate {
+    transform: none;
+  }
+
+  .splash-gate__copy,
+  .splash-gate__copy--secondary,
+  .splash-gate__enter {
+    transition: none;
+    transform: none;
+  }
+
+  .splash-page.show-gate .splash-gate__copy,
+  .splash-page.show-gate .splash-gate__copy--secondary,
+  .splash-page.show-gate .splash-gate__enter {
+    opacity: 1;
+    transition-delay: 0ms;
+  }
+}

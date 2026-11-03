@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kabukicho postcard — Kabukicho, Tokyo</title>
+    <link rel="icon" type="image/png" href="../assets/jpg/KCpixportrait.jpg" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/detail.css" />
+    <link rel="stylesheet" href="../css/kabuki-page.css" />
+  </head>
+  <body class="kabuki-page">
+    <div class="detail-page">
+      <a class="detail-back" href="index.html">← Home</a>
+      <main class="detail-main kabuki-lead">
+        <h1>Kabukicho postcard</h1>
+        <p>
+          This project asked for a postcard campaign for a real place of our choosing. I picked <strong>Kabukicho</strong>, the dense entertainment quarter in Shinjuku, Tokyo—neon, narrow lanes, and layered signage compressed into a single night walk. The animated study below distills that energy into a looping graphic; the five panels are social-sized crops used to test type, color, and composition before locking the final card layouts.
+        </p>
+        <p>
+          Scroll the row of studies, click any panel to open a full-screen viewer, and use the side arrows or keyboard to move through the set. The floating <strong>×</strong> returns you here.
+        </p>
+      </main>
+
+      <img class="kabuki-hero-gif" src="../assets/gif/KabukiGIFFinal.gif" alt="Kabukicho motion study animation" />
+
+      <div class="detail-main">
+        <h2 class="detail-subsection-title">Postcard studies</h2>
+        <div class="kabuki-postcards" id="kabukiPostcards" role="list">
+          <button type="button" class="kabuki-thumb" data-kabuki-src="../assets/jpg/SocialPostC1.jpg" aria-label="Open study 1">
+            <img src="../assets/jpg/SocialPostC1.jpg" alt="Postcard study 1" />
+          </button>
+          <button type="button" class="kabuki-thumb" data-kabuki-src="../assets/jpg/SocialPostC2.jpg" aria-label="Open study 2">
+            <img src="../assets/jpg/SocialPostC2.jpg" alt="Postcard study 2" />
+          </button>
+          <button type="button" class="kabuki-thumb" data-kabuki-src="../assets/jpg/SocialPostC3.jpg" aria-label="Open study 3">
+            <img src="../assets/jpg/SocialPostC3.jpg" alt="Postcard study 3" />
+          </button>
+          <button type="button" class="kabuki-thumb" data-kabuki-src="../assets/jpg/SocialPostC4.jpg" aria-label="Open study 4">
+            <img src="../assets/jpg/SocialPostC4.jpg" alt="Postcard study 4" />
+          </button>
+          <button type="button" class="kabuki-thumb" data-kabuki-src="../assets/jpg/SocialPostC5.jpg" aria-label="Open study 5">
+            <img src="../assets/jpg/SocialPostC5.jpg" alt="Postcard study 5" />
+          </button>
+        </div>
+      </div>
+
+      <div class="kabuki-lightbox" id="kabukiLightbox" aria-hidden="true" role="dialog" aria-label="Image viewer">
+        <button type="button" class="kabuki-lightbox-close" id="kabukiLightboxClose" aria-label="Close viewer">×</button>
+        <button type="button" class="kabuki-lightbox-arrow kabuki-lightbox-arrow--prev" id="kabukiLightboxPrev" aria-label="Previous image">‹</button>
+        <button type="button" class="kabuki-lightbox-arrow kabuki-lightbox-arrow--next" id="kabukiLightboxNext" aria-label="Next image">›</button>
+        <figure>
+          <img id="kabukiLightboxImg" src="" alt="" />
+        </figure>
+      </div>
+    </div>
+
+    <script src="../js/kabuki-gallery.js" defer></script>
+  </body>
+</html>

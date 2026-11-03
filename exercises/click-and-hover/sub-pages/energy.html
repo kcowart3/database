@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy - Sovereign.OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="../script.js"></script>
+</head>
+<body class="landing sub-page">
+<div class="crt-screen-wrapper">
+    <div class="sci-fi-bg" aria-hidden="true"></div>
+    <div id="container" class="landing-wrap">
+        <div class="diagnostic-frame diagnostic-frame--wide">
+            <span class="corner-bracket corner-tl" aria-hidden="true"></span>
+            <span class="corner-bracket corner-tr" aria-hidden="true"></span>
+            <span class="corner-bracket corner-bl" aria-hidden="true"></span>
+            <span class="corner-bracket corner-br" aria-hidden="true"></span>
+            <header class="diag-header">
+                <h1 class="diag-title">ENERGY</h1>
+                <p class="diag-sub">Core reserves // MONITORING</p>
+            </header>
+            <div class="diag-divider"></div>
+            <a class="diag-link diag-back" href="../diagnostic.html">
+                <span class="diag-link-main">
+                    <span class="chev">&lt;</span>
+                    <span class="diag-label">RETURN TO DIAGNOSTIC</span>
+                </span>
+            </a>
+            <div class="diag-divider thin"></div>
+            <div class="energy-layout">
+                <div class="energy-left">
+                    <div class="energy-bar-stack">
+                        <span class="energy-bar-label" id="energyBarLabel">Reserve level</span>
+                        <div class="energy-bar-h" id="energyBarTrack" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-labelledby="energyBarLabel" aria-valuenow="7">
+                            <div class="energy-bar-h-fill" id="energyBarFill"></div>
+                            <div class="energy-bar-cap-marker" id="energyCapMarker" hidden aria-hidden="true"></div>
+                        </div>
+                    </div>
+                    <p class="energy-pct-large" id="energyPctDisplay">7%</p>
+                    <p class="energy-lifetime" id="energyLifetimeDisplay"></p>
+                    <p class="energy-power-saving" id="energyPowerSaving" hidden>SHIP SET TO POWER SAVING MODE.</p>
+                    <p class="energy-shield-status" id="energyShieldStatus" hidden>Shields active: max reserve output reduced.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+(function () {
+    var STORAGE_KEY = "sovereignEnergyPct";
+    var SHIELD_ACTIVE_KEY = "sovereignShieldsActive";
+    var NORMAL_MAX = 100;
+    var SHIELD_MAX = 60;
+    var track = document.getElementById("energyBarTrack");
+    var fill = document.getElementById("energyBarFill");
+    var capMarker = document.getElementById("energyCapMarker");
+    var pctEl = document.getElementById("energyPctDisplay");
+    var lifeEl = document.getElementById("energyLifetimeDisplay");
+    var powerSavingEl = document.getElementById("energyPowerSaving");
+    var shieldStatusEl = document.getElementById("energyShieldStatus");
+    function getMaxPct() {
+        return localStorage.getItem(SHIELD_ACTIVE_KEY) === "1" ? SHIELD_MAX : NORMAL_MAX;
+    }
+    function clamp(n, lo, hi) { return Math.max(lo, Math.min(hi, n)); }
+    function readStoredPct() {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (raw === null) return 7;
+        var n = parseInt(raw, 10);
+        if (isNaN(n)) return 7;
+        return clamp(n, 0, getMaxPct());
+    }
+    function persistPct(pct) { localStorage.setItem(STORAGE_KEY, String(pct)); }
+    function computeLifetime(pct) {
+        var cycles = Math.max(0, Math.round(100 * pct));
+        return { cycles: cycles };
+    }
+    function setPct(pct) {
+        var maxPct = getMaxPct();
+        pct = clamp(Math.round(pct), 0, maxPct);
+        fill.style.width = pct + "%";
+        pctEl.textContent = pct + "%";
+        track.setAttribute("aria-valuemax", String(maxPct));
+        track.setAttribute("aria-valuenow", String(pct));
+        if (capMarker) {
+            capMarker.hidden = maxPct === NORMAL_MAX;
+            capMarker.style.left = maxPct + "%";
+        }
+        if (shieldStatusEl) {
+            shieldStatusEl.hidden = maxPct === NORMAL_MAX;
+            shieldStatusEl.textContent = "Shields active: reserve capped at " + maxPct + "%.";
+        }
+        var t = computeLifetime(pct);
+        lifeEl.textContent = "Estimated remaining: " + t.cycles + " cycles";
+        if (powerSavingEl) {
+            powerSavingEl.hidden = pct >= 10;
+        }
+        persistPct(pct);
+    }
+    function pctFromClientX(clientX) {
+        var rect = track.getBoundingClientRect();
+        return rect.width <= 0 ? 0 : ((clientX - rect.left) / rect.width) * 100;
+    }
+    var dragging = false;
+    track.addEventListener("mousedown", function (e) { dragging = true; setPct(pctFromClientX(e.clientX)); e.preventDefault(); });
+    document.addEventListener("mousemove", function (e) { if (dragging) setPct(pctFromClientX(e.clientX)); });
+    document.addEventListener("mouseup", function () { dragging = false; });
+    track.addEventListener("touchstart", function (e) {
+        if (e.touches.length !== 1) return;
+        dragging = true;
+        setPct(pctFromClientX(e.touches[0].clientX));
+        e.preventDefault();
+    }, { passive: false });
+    document.addEventListener("touchmove", function (e) {
+        if (!dragging || e.touches.length !== 1) return;
+        setPct(pctFromClientX(e.touches[0].clientX));
+        e.preventDefault();
+    }, { passive: false });
+    document.addEventListener("touchend", function () { dragging = false; });
+    document.addEventListener("touchcancel", function () { dragging = false; });
+    track.addEventListener("keydown", function (e) {
+        var cur = parseInt(track.getAttribute("aria-valuenow"), 10) || 0;
+        if (e.key === "ArrowLeft" || e.key === "ArrowDown") { setPct(cur - 1); e.preventDefault(); }
+        else if (e.key === "ArrowRight" || e.key === "ArrowUp") { setPct(cur + 1); e.preventDefault(); }
+        else if (e.key === "Home") { setPct(0); e.preventDefault(); }
+        else if (e.key === "End") { setPct(getMaxPct()); e.preventDefault(); }
+    });
+    setPct(readStoredPct());
+})();
+</script>
+</body>
+</html>
